@@ -6,6 +6,7 @@ AKTools API调用 - 分时数据相关接口
 
 import requests
 import pandas as pd
+from akshare_client import call_aktools_api
 
 
 def stock_zh_a_minute(symbol, period="1", adjust=""):
@@ -29,20 +30,11 @@ def stock_zh_a_minute(symbol, period="1", adjust=""):
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_zh_a_minute"
-    params = {
+    return call_aktools_api("/api/public/stock_zh_a_minute", params={
         "symbol": symbol,
         "period": period,
         "adjust": adjust
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 def stock_zh_a_hist_min_em(symbol, period="1", start_date="", end_date="", adjust=""):
@@ -68,22 +60,13 @@ def stock_zh_a_hist_min_em(symbol, period="1", start_date="", end_date="", adjus
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_zh_a_hist_min_em"
-    params = {
+    return call_aktools_api("/api/public/stock_zh_a_hist_min_em", params={
         "symbol": symbol,
         "period": period,
         "start_date": start_date,
         "end_date": end_date,
         "adjust": adjust
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 def stock_intraday_em(symbol):
@@ -105,18 +88,9 @@ def stock_intraday_em(symbol):
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_intraday_em"
-    params = {
+    return call_aktools_api("/api/public/stock_intraday_em", params={
         "symbol": symbol
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 def stock_intraday_sina(symbol):
@@ -138,18 +112,9 @@ def stock_intraday_sina(symbol):
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_intraday_sina"
-    params = {
+    return call_aktools_api("/api/public/stock_intraday_sina", params={
         "symbol": symbol
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 def stock_zh_a_hist_pre_min_em(symbol):
@@ -171,18 +136,9 @@ def stock_zh_a_hist_pre_min_em(symbol):
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_zh_a_hist_pre_min_em"
-    params = {
+    return call_aktools_api("/api/public/stock_zh_a_hist_pre_min_em", params={
         "symbol": symbol
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 # 示例调用

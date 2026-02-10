@@ -12,6 +12,7 @@ from config import (
     MCP_SERVER_NAME,
     MCP_SERVER_VERSION,
     MCP_SERVER_PORT,
+    MCP_SERVER_HOST,
     LOG_LEVEL
 )
 
@@ -95,6 +96,10 @@ def stock_szse_area_summary() -> dict:
 def stock_szse_sector_summary(symbol: str = "当年") -> dict:
     """
     获取深圳证券交易所股票行业成交数据
+
+    参数说明:
+    - symbol: str, 可选, 默认"当年"
+      参数格式: 字符串类型，可选值如"当年"、"近一年"、"近三年"等时间范围描述
     """
     try:
         from akshare_api import stock_szse_sector_summary
@@ -125,6 +130,11 @@ def stock_sse_deal_daily() -> dict:
 def stock_individual_info_em(symbol: str) -> dict:
     """
     获取个股信息查询-东方财富
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 6位股票代码，如"000001"、"603777"
+      说明: 股票代码可以在stock_zh_a_spot_em()中获取
     """
     try:
         from akshare_api import stock_individual_info_em
@@ -142,6 +152,11 @@ def stock_individual_info_em(symbol: str) -> dict:
 def stock_individual_basic_info_xq(symbol: str) -> dict:
     """
     获取个股信息查询-雪球
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 带市场前缀的股票代码，如"SH601127"、"SZ000001"
+      说明: 市场前缀包括SH(上海)、SZ(深圳)、BJ(北京)
     """
     try:
         from akshare_api import stock_individual_basic_info_xq
@@ -159,6 +174,10 @@ def stock_individual_basic_info_xq(symbol: str) -> dict:
 def stock_bid_ask_em(symbol: str) -> dict:
     """
     获取行情报价-东方财富
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 6位股票代码，如"000001"、"603777"
     """
     try:
         from akshare_api import stock_bid_ask_em
@@ -293,6 +312,11 @@ def stock_zh_a_spot() -> dict:
 def stock_individual_spot_xq(symbol: str) -> dict:
     """
     获取个股实时行情-雪球
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 带市场前缀的股票代码，如"SH600000"、"SZ000001"
+      说明: 市场前缀包括SH(上海)、SZ(深圳)、BJ(北京)
     """
     try:
         from akshare_api import stock_individual_spot_xq
@@ -310,6 +334,30 @@ def stock_individual_spot_xq(symbol: str) -> dict:
 def stock_zh_a_hist(symbol: str, period: str = "daily", start_date: str = "20210301", end_date: str = "20210616", adjust: str = "", timeout: str = None) -> dict:
     """
     获取历史行情数据-东方财富
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 6位股票代码，如"000001"、"603777"
+
+    - period: str, 可选, 默认"daily"
+      参数格式: 字符串类型，可选值: "daily"(日线)、"weekly"(周线)、"monthly"(月线)
+
+    - start_date: str, 可选, 默认"20210301"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20210301"
+
+    - end_date: str, 可选, 默认"20210616"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20210616"
+
+    - adjust: str, 可选, 默认""(不复权)
+      参数格式: 字符串类型
+      可选值:
+      - "": 不复权(默认)
+      - "qfq": 前复权
+      - "hfq": 后复权
+
+    - timeout: str, 可选, 默认None
+      参数格式: 浮点数，单位为秒
+      说明: 默认不设置超时参数
     """
     try:
         from akshare_api import stock_zh_a_hist
@@ -337,6 +385,25 @@ def stock_zh_a_hist(symbol: str, period: str = "daily", start_date: str = "20210
 def stock_zh_a_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
     获取历史行情数据-新浪
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 带市场前缀的股票代码，如"sh600000"、"sz000001"
+
+    - start_date: str, 可选, 默认"20201103"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20201103"
+
+    - end_date: str, 可选, 默认"20201116"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20201116"
+
+    - adjust: str, 可选, 默认""(不复权)
+      参数格式: 字符串类型
+      可选值:
+      - "": 不复权(默认)
+      - "qfq": 前复权
+      - "hfq": 后复权
+      - "qfq-factor": 前复权因子
+      - "hfq-factor": 后复权因子
     """
     try:
         from akshare_api import stock_zh_a_daily
@@ -383,6 +450,18 @@ def stock_zh_a_hist_tx(symbol: str, start_date: str = "20201103", end_date: str 
 def stock_zh_a_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
     """
     获取分时数据-新浪
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 带市场前缀的股票代码，如"sh600519"、"sz000001"
+
+    - period: str, 可选, 默认"1"
+      参数格式: 数字字符串，表示分钟间隔
+      可选值: "1"(1分钟)、"5"(5分钟)、"15"(15分钟)、"30"(30分钟)、"60"(60分钟)
+
+    - adjust: str, 可选, 默认""(不复权)
+      参数格式: 字符串类型
+      可选值: ""(不复权)、"qfq"(前复权)
     """
     try:
         from akshare_api import stock_zh_a_minute
@@ -404,6 +483,24 @@ def stock_zh_a_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
 def stock_zh_a_hist_min_em(symbol: str, period: str = "1", start_date: str = "2021-09-01 09:30:00", end_date: str = "2021-09-01 15:00:00", adjust: str = "") -> dict:
     """
     获取分时数据-东方财富
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 6位股票代码，如"000001"、"603777"
+
+    - period: str, 可选, 默认"1"
+      参数格式: 数字字符串，表示分钟间隔
+      可选值: "1"(1分钟)、"5"(5分钟)、"15"(15分钟)、"30"(30分钟)、"60"(60分钟)
+
+    - start_date: str, 可选, 默认"2021-09-01 09:30:00"
+      参数格式: 日期时间字符串，格式"YYYY-MM-DD HH:MM:SS"，如"2021-09-01 09:30:00"
+
+    - end_date: str, 可选, 默认"2021-09-01 15:00:00"
+      参数格式: 日期时间字符串，格式"YYYY-MM-DD HH:MM:SS"，如"2021-09-01 15:00:00"
+
+    - adjust: str, 可选, 默认""(不复权)
+      参数格式: 字符串类型
+      可选值: ""(不复权)、"qfq"(前复权)
     """
     try:
         from akshare_api import stock_zh_a_hist_min_em
@@ -480,6 +577,13 @@ def stock_zh_a_hist_pre_min_em(symbol: str) -> dict:
 def stock_zh_a_tick_tx(symbol: str, trade_date: str = "20210316") -> dict:
     """
     获取历史分笔数据-腾讯
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 带市场前缀的股票代码，如"sh600519"、"sz000001"
+
+    - trade_date: str, 可选, 默认"20210316"
+      参数格式: 8位数字字符串，格式YYYYMMDD，表示交易日期，如"20210316"
     """
     try:
         from akshare_api import stock_zh_a_tick_tx
@@ -624,6 +728,11 @@ def stock_financial_analysis_indicator(symbol: str) -> dict:
 def stock_yjbb_em(date: str = "20220331") -> dict:
     """
     获取业绩报表数据
+
+    参数说明:
+    - date: str, 可选, 默认"20220331"
+      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
+      常用值: "20220331"(一季度)、"20220630"(二季度)、"20220930"(三季度)、"20221231"(四季度)
     """
     try:
         from akshare_api import stock_yjbb_em
@@ -719,6 +828,25 @@ def stock_board_concept_name_em() -> dict:
 def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
     """
     获取概念板块历史行情
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 概念板块名称或代码，如"新能源汽车"、"人工智能"
+      说明: 可以从stock_board_concept_name_em()获取板块列表
+
+    - period: str, 可选, 默认"daily"
+      参数格式: 字符串类型
+      可选值: "daily"(日线)、"weekly"(周线)、"monthly"(月线)
+
+    - start_date: str, 可选, 默认"20220101"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20220101"
+
+    - end_date: str, 可选, 默认"20250227"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20250227"
+
+    - adjust: str, 可选, 默认""(不复权)
+      参数格式: 字符串类型
+      可选值: ""(不复权)、"qfq"(前复权)
     """
     try:
         from akshare_api import stock_board_concept_hist_em
@@ -848,6 +976,13 @@ def stock_dt_pool_em() -> dict:
 def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417") -> dict:
     """
     获取龙虎榜详情
+
+    参数说明:
+    - start_date: str, 可选, 默认"20230403"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20230403"
+
+    - end_date: str, 可选, 默认"20230417"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20230417"
     """
     try:
         from akshare_api import stock_lhb_detail_em
@@ -906,6 +1041,14 @@ def stock_institute_visit_detail_em() -> dict:
 def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
     """
     获取机构持股详情
+
+    参数说明:
+    - stock: str, 必需
+      参数格式: 6位股票代码，如"000001"、"603777"
+
+    - quarter: str, 必需
+      参数格式: 季度字符串，格式"YYYYQ季度"
+      常用值: "2024Q1"(2024年一季度)、"2024Q2"(2024年二季度)、"2024Q3"(2024年三季度)、"2024Q4"(2024年四季度)
     """
     try:
         from akshare_api import stock_institute_hold_detail
@@ -1359,6 +1502,11 @@ def stock_financial_analysis_indicator(symbol: str) -> dict:
 def stock_yjbb_em(date: str = "20220331") -> dict:
     """
     获取业绩报表数据
+
+    参数说明:
+    - date: str, 可选, 默认"20220331"
+      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
+      常用值: "20220331"(一季度)、"20220630"(二季度)、"20220930"(三季度)、"20221231"(四季度)
     """
     try:
         from akshare_api import stock_yjbb_em
@@ -1454,6 +1602,25 @@ def stock_board_concept_name_em() -> dict:
 def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
     """
     获取概念板块历史行情
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 概念板块名称或代码，如"新能源汽车"、"人工智能"
+      说明: 可以从stock_board_concept_name_em()获取板块列表
+
+    - period: str, 可选, 默认"daily"
+      参数格式: 字符串类型
+      可选值: "daily"(日线)、"weekly"(周线)、"monthly"(月线)
+
+    - start_date: str, 可选, 默认"20220101"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20220101"
+
+    - end_date: str, 可选, 默认"20250227"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20250227"
+
+    - adjust: str, 可选, 默认""(不复权)
+      参数格式: 字符串类型
+      可选值: ""(不复权)、"qfq"(前复权)
     """
     try:
         from akshare_api import stock_board_concept_hist_em
@@ -1583,6 +1750,13 @@ def stock_dt_pool_em() -> dict:
 def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417") -> dict:
     """
     获取龙虎榜详情
+
+    参数说明:
+    - start_date: str, 可选, 默认"20230403"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20230403"
+
+    - end_date: str, 可选, 默认"20230417"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20230417"
     """
     try:
         from akshare_api import stock_lhb_detail_em
@@ -1641,6 +1815,14 @@ def stock_institute_visit_detail_em() -> dict:
 def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
     """
     获取机构持股详情
+
+    参数说明:
+    - stock: str, 必需
+      参数格式: 6位股票代码，如"000001"、"603777"
+
+    - quarter: str, 必需
+      参数格式: 季度字符串，格式"YYYYQ季度"
+      常用值: "2024Q1"(2024年一季度)、"2024Q2"(2024年二季度)、"2024Q3"(2024年三季度)、"2024Q4"(2024年四季度)
     """
     try:
         from akshare_api import stock_institute_hold_detail
@@ -1848,6 +2030,10 @@ def stock_zygc_em(symbol: str) -> dict:
 def stock_gsrl_gsdt_em(date: str) -> dict:
     """
     获取公司动态-东方财富
+
+    参数说明:
+    - date: str, 必需
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20240315"
     """
     try:
         from akshare_api import stock_gsrl_gsdt_em
@@ -1912,6 +2098,14 @@ def stock_news_main_cx() -> dict:
 def stock_financial_report_sina(stock: str, indicator: str) -> dict:
     """
     获取财务报表-新浪
+
+    参数说明:
+    - stock: str, 必需
+      参数格式: 带市场前缀的股票代码，如"sh600519"、"sz000001"
+
+    - indicator: str, 必需
+      参数格式: 财务指标类型
+      可选值: "利润表"、"资产负债表"、"现金流量表"
     """
     try:
         from akshare_api import stock_financial_report_sina
@@ -1931,6 +2125,11 @@ def stock_financial_report_sina(stock: str, indicator: str) -> dict:
 def stock_yjkb_em(date: str) -> dict:
     """
     获取业绩快报-东方财富
+
+    参数说明:
+    - date: str, 必需
+      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
+      常用值: "20240331"(一季度)、"20240630"(二季度)、"20240930"(三季度)、"20241231"(四季度)
     """
     try:
         from akshare_api import stock_yjkb_em
@@ -1948,6 +2147,11 @@ def stock_yjkb_em(date: str) -> dict:
 def stock_yjyg_em(date: str) -> dict:
     """
     获取业绩预告-东方财富
+
+    参数说明:
+    - date: str, 必需
+      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
+      常用值: "20240331"(一季度)、"20240630"(二季度)、"20240930"(三季度)、"20241231"(四季度)
     """
     try:
         from akshare_api import stock_yjyg_em
@@ -1965,6 +2169,14 @@ def stock_yjyg_em(date: str) -> dict:
 def stock_yysj_em(symbol: str, date: str) -> dict:
     """
     获取预约披露时间-东方财富
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 6位股票代码，如"000001"、"603777"
+
+    - date: str, 必需
+      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
+      常用值: "20240331"(一季度)、"20240630"(二季度)、"20240930"(三季度)、"20241231"(四季度)
     """
     try:
         from akshare_api import stock_yysj_em
@@ -1984,6 +2196,11 @@ def stock_yysj_em(symbol: str, date: str) -> dict:
 def stock_board_concept_cons_em(symbol: str) -> dict:
     """
     获取概念板块成分股-东方财富
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 概念板块名称或代码，如"新能源汽车"、"人工智能"
+      说明: 可以从stock_board_concept_name_em()获取板块列表
     """
     try:
         from akshare_api import stock_board_concept_cons_em
@@ -2026,6 +2243,11 @@ def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: 
 def stock_board_industry_cons_em(symbol: str) -> dict:
     """
     获取行业板块成分股-东方财富
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 行业板块名称或代码，如"银行"、"医药生物"
+      说明: 可以从stock_board_industry_name_em()获取板块列表
     """
     try:
         from akshare_api import stock_board_industry_cons_em
@@ -2043,6 +2265,25 @@ def stock_board_industry_cons_em(symbol: str) -> dict:
 def stock_board_industry_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
     """
     获取行业板块指数-东方财富
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 行业板块名称或代码，如"银行"、"医药生物"
+      说明: 可以从stock_board_industry_name_em()获取板块列表
+
+    - period: str, 可选, 默认"daily"
+      参数格式: 字符串类型
+      可选值: "daily"(日线)、"weekly"(周线)、"monthly"(月线)
+
+    - start_date: str, 可选, 默认"20220101"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20220101"
+
+    - end_date: str, 可选, 默认"20250227"
+      参数格式: 8位数字字符串，格式YYYYMMDD，如"20250227"
+
+    - adjust: str, 可选, 默认""(不复权)
+      参数格式: 字符串类型
+      可选值: ""(不复权)、"qfq"(前复权)
     """
     try:
         from akshare_api import stock_board_industry_hist_em
@@ -2068,6 +2309,11 @@ def stock_board_industry_hist_em(symbol: str, period: str = "daily", start_date:
 def stock_hot_follow_xq(symbol: str) -> dict:
     """
     获取股票热度-雪球关注排行榜
+
+    参数说明:
+    - symbol: str, 必需
+      参数格式: 带市场前缀的股票代码，如"SH600000"、"SZ000001"
+      说明: 市场前缀包括SH(上海)、SZ(深圳)、BJ(北京)
     """
     try:
         from akshare_api import stock_hot_follow_xq
@@ -2177,4 +2423,5 @@ def stock_hot_related_em(symbol: str) -> dict:
 if __name__ == "__main__":
     logger.info(f"启动 {MCP_SERVER_NAME} v{MCP_SERVER_VERSION}")
     logger.info(f"监听端口: {MCP_SERVER_PORT}")
-    mcp.run(transport="streamable-http", port=MCP_SERVER_PORT)
+    logger.info(f"监听地址: {MCP_SERVER_HOST}:{MCP_SERVER_PORT}")
+    mcp.run(transport="streamable-http", host=MCP_SERVER_HOST, port=MCP_SERVER_PORT)

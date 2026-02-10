@@ -6,6 +6,7 @@ AKTools API调用 - 实时行情数据相关接口
 
 import requests
 import pandas as pd
+from akshare_client import call_aktools_api
 
 
 def stock_zh_a_spot_em():
@@ -49,15 +50,7 @@ def stock_zh_a_spot_em():
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_zh_a_spot_em"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    return call_aktools_api("/api/public/stock_zh_a_spot_em")
 
 
 def stock_sh_a_spot_em():
@@ -77,15 +70,7 @@ def stock_sh_a_spot_em():
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_sh_a_spot_em"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    return call_aktools_api("/api/public/stock_sh_a_spot_em")
 
 
 def stock_sz_a_spot_em():
@@ -105,15 +90,7 @@ def stock_sz_a_spot_em():
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_sz_a_spot_em"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    return call_aktools_api("/api/public/stock_sz_a_spot_em")
 
 
 def stock_bj_a_spot_em():
@@ -133,15 +110,7 @@ def stock_bj_a_spot_em():
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_bj_a_spot_em"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    return call_aktools_api("/api/public/stock_bj_a_spot_em")
 
 
 def stock_new_a_spot_em():
@@ -161,15 +130,7 @@ def stock_new_a_spot_em():
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_new_a_spot_em"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    return call_aktools_api("/api/public/stock_new_a_spot_em")
 
 
 def stock_cy_a_spot_em():
@@ -189,15 +150,7 @@ def stock_cy_a_spot_em():
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_cy_a_spot_em"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    return call_aktools_api("/api/public/stock_cy_a_spot_em")
 
 
 def stock_kc_a_spot_em():
@@ -217,15 +170,7 @@ def stock_kc_a_spot_em():
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_kc_a_spot_em"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    return call_aktools_api("/api/public/stock_kc_a_spot_em")
 
 
 def stock_zh_ab_comparison_em():
@@ -245,15 +190,7 @@ def stock_zh_ab_comparison_em():
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_zh_ab_comparison_em"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    return call_aktools_api("/api/public/stock_zh_ab_comparison_em")
 
 
 def stock_zh_a_spot():
@@ -273,15 +210,7 @@ def stock_zh_a_spot():
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_zh_a_spot"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    return call_aktools_api("/api/public/stock_zh_a_spot")
 
 
 def stock_individual_spot_xq(symbol):
@@ -303,18 +232,9 @@ def stock_individual_spot_xq(symbol):
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_individual_spot_xq"
-    params = {
+    return call_aktools_api("/api/public/stock_individual_spot_xq", params={
         "symbol": symbol
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 # 示例调用

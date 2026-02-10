@@ -6,6 +6,7 @@ AKTools API调用 - 历史分笔数据相关接口
 
 import requests
 import pandas as pd
+from akshare_client import call_aktools_api
 
 
 def stock_zh_a_tick_tx(symbol, trade_date):
@@ -28,19 +29,10 @@ def stock_zh_a_tick_tx(symbol, trade_date):
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_zh_a_tick_tx"
-    params = {
+    return call_aktools_api("/api/public/stock_zh_a_tick_tx", params={
         "symbol": symbol,
         "trade_date": trade_date
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 # 示例调用

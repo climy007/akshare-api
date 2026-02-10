@@ -6,6 +6,7 @@ AKTools API调用 - 行情报价相关接口
 
 import requests
 import pandas as pd
+from akshare_client import call_aktools_api
 
 
 def stock_bid_ask_em(symbol):
@@ -27,18 +28,9 @@ def stock_bid_ask_em(symbol):
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_bid_ask_em"
-    params = {
+    return call_aktools_api("/api/public/stock_bid_ask_em", params={
         "symbol": symbol
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 # 示例调用

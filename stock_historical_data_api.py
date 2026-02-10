@@ -6,6 +6,7 @@ AKTools API调用 - 历史行情数据相关接口
 
 import requests
 import pandas as pd
+from akshare_client import call_aktools_api
 
 
 def stock_zh_a_hist(symbol, period="daily", start_date="", end_date="", adjust="", timeout=None):
@@ -96,21 +97,12 @@ def stock_zh_a_daily(symbol, start_date, end_date, adjust=""):
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_zh_a_daily"
-    params = {
+    return call_aktools_api("/api/public/stock_zh_a_daily", params={
         "symbol": symbol,
         "start_date": start_date,
         "end_date": end_date,
         "adjust": adjust
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 def stock_zh_a_hist_tx(symbol, start_date, end_date, adjust=""):
@@ -135,21 +127,12 @@ def stock_zh_a_hist_tx(symbol, start_date, end_date, adjust=""):
     
     返回类型: pandas.DataFrame
     """
-    url = "http://127.0.0.1:8080/api/public/stock_zh_a_hist_tx"
-    params = {
+    return call_aktools_api("/api/public/stock_zh_a_hist_tx", params={
         "symbol": symbol,
         "start_date": start_date,
         "end_date": end_date,
         "adjust": adjust
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return pd.DataFrame(data)
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-        return pd.DataFrame()
+    })
 
 
 # 示例调用

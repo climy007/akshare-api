@@ -1,0 +1,30 @@
+services:
+  aktools:
+    image: kkqy/aktools:latest
+    container_name: aktools-service
+    # Port 8080 only accessible internally within Docker network
+    restart: unless-stopped
+    networks:
+      - akshare-network
+
+  akshare-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: akshare-mcp-server
+    ports:
+      - "3115:3115"
+    environment:
+      - AKTOOLS_BASE_URL=http://aktools:8080
+      - MCP_SERVER_PORT=3115
+      - MCP_SERVER_HOST=0.0.0.0
+      - LOG_LEVEL=INFO
+    depends_on:
+      - aktools
+    restart: unless-stopped
+    networks:
+      - akshare-network
+
+networks:
+  akshare-network:
+    driver: bridge
