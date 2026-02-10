@@ -443,6 +443,41 @@ except requests.exceptions.RequestException as e:
 
 如有任何问题或建议，欢迎通过Issue与我们联系。
 
+## MCP 服务器
+
+本项目提供基于 FastMCP 框架的 MCP 服务器，将所有 AKShare 接口暴露为 MCP tools，
+支持 AI 助手（如 Claude）直接调用股票数据接口。
+
+### 快速启动
+
+```bash
+# 1. 确保 AKTools 服务运行 (端口 8080)
+
+# 2. 启动 MCP 服务器
+python mcp_server.py
+# 或使用启动脚本
+./run_mcp.sh
+
+# 3. 服务器将在端口 8000 提供 streamable-http MCP 服务
+```
+
+### Claude Desktop 配置
+
+在 Claude Desktop 配置文件中添加：
+
+```json
+{
+  "mcpServers": {
+    "akshare-api": {
+      "url": "http://localhost:8000",
+      "transport": "streamable-http"
+    }
+  }
+}
+```
+
+详细使用指南请参考：[MCP 服务器使用指南](docs/MCP_SERVER_GUIDE.md)
+
 ## 更新日志
 
 ### 🆕 v2.0.0 (最新版本)
