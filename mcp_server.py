@@ -48,16 +48,14 @@ AKShare 股票数据接口 MCP 服务器 v{MCP_SERVER_VERSION}
 )
 
 # =============================================================================
-# 1. A股数据接口 - 股票市场总貌 (5个)
+# MCP Tools - 133 个 AKShare 股票数据接口
 # =============================================================================
+
 
 @mcp.tool()
 def stock_sse_summary() -> dict:
     """
     获取上海证券交易所总貌数据
-
-    Returns:
-        dict: 包含上交所市场总貌信息的字典
     """
     try:
         from akshare_api import stock_sse_summary
@@ -67,14 +65,10 @@ def stock_sse_summary() -> dict:
         logger.error(f"stock_sse_summary 执行失败: {e}")
         return format_error_response(e)
 
-
 @mcp.tool()
 def stock_szse_summary() -> dict:
     """
     获取深圳证券交易所总貌数据
-
-    Returns:
-        dict: 包含深交所市场总貌信息的字典
     """
     try:
         from akshare_api import stock_szse_summary
@@ -84,14 +78,10 @@ def stock_szse_summary() -> dict:
         logger.error(f"stock_szse_summary 执行失败: {e}")
         return format_error_response(e)
 
-
 @mcp.tool()
 def stock_szse_area_summary() -> dict:
     """
     获取深圳证券交易所地区交易排序数据
-
-    Returns:
-        dict: 包含地区交易排序信息的字典
     """
     try:
         from akshare_api import stock_szse_area_summary
@@ -101,34 +91,27 @@ def stock_szse_area_summary() -> dict:
         logger.error(f"stock_szse_area_summary 执行失败: {e}")
         return format_error_response(e)
 
-
 @mcp.tool()
 def stock_szse_sector_summary(symbol: str = "当年") -> dict:
     """
     获取深圳证券交易所股票行业成交数据
-
-    Args:
-        symbol: 统计周期，默认"当年"
-
-    Returns:
-        dict: 包含行业成交数据信息的字典
     """
     try:
         from akshare_api import stock_szse_sector_summary
-        df = stock_szse_sector_summary(symbol=symbol)
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_szse_sector_summary(**kwargs)
         return dataframe_to_mcp_result(df)
     except Exception as e:
         logger.error(f"stock_szse_sector_summary 执行失败: {e}")
         return format_error_response(e)
 
-
 @mcp.tool()
 def stock_sse_deal_daily() -> dict:
     """
     获取上海证券交易所每日概况数据
-
-    Returns:
-        dict: 包含上交所每日概况信息的字典
     """
     try:
         from akshare_api import stock_sse_deal_daily
@@ -137,6 +120,2057 @@ def stock_sse_deal_daily() -> dict:
     except Exception as e:
         logger.error(f"stock_sse_deal_daily 执行失败: {e}")
         return format_error_response(e)
+
+@mcp.tool()
+def stock_individual_info_em(symbol: str) -> dict:
+    """
+    获取个股信息查询-东方财富
+    """
+    try:
+        from akshare_api import stock_individual_info_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_individual_info_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_individual_info_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_individual_basic_info_xq(symbol: str) -> dict:
+    """
+    获取个股信息查询-雪球
+    """
+    try:
+        from akshare_api import stock_individual_basic_info_xq
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_individual_basic_info_xq(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_individual_basic_info_xq 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_bid_ask_em(symbol: str) -> dict:
+    """
+    获取行情报价-东方财富
+    """
+    try:
+        from akshare_api import stock_bid_ask_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_bid_ask_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_bid_ask_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_spot_em() -> dict:
+    """
+    获取沪深京A股实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_a_spot_em
+        df = stock_zh_a_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_sh_a_spot_em() -> dict:
+    """
+    获取沪A股实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_sh_a_spot_em
+        df = stock_sh_a_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_sh_a_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_sz_a_spot_em() -> dict:
+    """
+    获取深A股实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_sz_a_spot_em
+        df = stock_sz_a_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_sz_a_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_bj_a_spot_em() -> dict:
+    """
+    获取京A股实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_bj_a_spot_em
+        df = stock_bj_a_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_bj_a_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_new_a_spot_em() -> dict:
+    """
+    获取新股实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_new_a_spot_em
+        df = stock_new_a_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_new_a_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_cy_a_spot_em() -> dict:
+    """
+    获取创业板实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_cy_a_spot_em
+        df = stock_cy_a_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_cy_a_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_kc_a_spot_em() -> dict:
+    """
+    获取科创板实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_kc_a_spot_em
+        df = stock_kc_a_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_kc_a_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_ab_comparison_em() -> dict:
+    """
+    获取AB股比价-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_ab_comparison_em
+        df = stock_zh_ab_comparison_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_ab_comparison_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_spot() -> dict:
+    """
+    获取沪深京A股实时行情-新浪
+    """
+    try:
+        from akshare_api import stock_zh_a_spot
+        df = stock_zh_a_spot()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_spot 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_individual_spot_xq(symbol: str) -> dict:
+    """
+    获取个股实时行情-雪球
+    """
+    try:
+        from akshare_api import stock_individual_spot_xq
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_individual_spot_xq(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_individual_spot_xq 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_hist(symbol: str, period: str = "daily", start_date: str = "20210301", end_date: str = "20210616", adjust: str = "", timeout: str = None) -> dict:
+    """
+    获取历史行情数据-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_a_hist
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if period is not None:
+            kwargs["period"] = period
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        if timeout is not None:
+            kwargs["timeout"] = timeout
+        df = stock_zh_a_hist(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_hist 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
+    """
+    获取历史行情数据-新浪
+    """
+    try:
+        from akshare_api import stock_zh_a_daily
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_zh_a_daily(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_daily 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_hist_tx(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
+    """
+    获取历史行情数据-腾讯
+    """
+    try:
+        from akshare_api import stock_zh_a_hist_tx
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_zh_a_hist_tx(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_hist_tx 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
+    """
+    获取分时数据-新浪
+    """
+    try:
+        from akshare_api import stock_zh_a_minute
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if period is not None:
+            kwargs["period"] = period
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_zh_a_minute(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_minute 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_hist_min_em(symbol: str, period: str = "1", start_date: str = "2021-09-01 09:30:00", end_date: str = "2021-09-01 15:00:00", adjust: str = "") -> dict:
+    """
+    获取分时数据-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_a_hist_min_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if period is not None:
+            kwargs["period"] = period
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_zh_a_hist_min_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_hist_min_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_intraday_em(symbol: str) -> dict:
+    """
+    获取日内分时数据-东方财富
+    """
+    try:
+        from akshare_api import stock_intraday_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_intraday_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_intraday_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_intraday_sina(symbol: str) -> dict:
+    """
+    获取日内分时数据-新浪
+    """
+    try:
+        from akshare_api import stock_intraday_sina
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_intraday_sina(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_intraday_sina 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_hist_pre_min_em(symbol: str) -> dict:
+    """
+    获取盘前数据-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_a_hist_pre_min_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zh_a_hist_pre_min_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_hist_pre_min_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_tick_tx(symbol: str, trade_date: str = "20210316") -> dict:
+    """
+    获取历史分笔数据-腾讯
+    """
+    try:
+        from akshare_api import stock_zh_a_tick_tx
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if trade_date is not None:
+            kwargs["trade_date"] = trade_date
+        df = stock_zh_a_tick_tx(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_tick_tx 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_growth_comparison_em(symbol: str) -> dict:
+    """
+    获取股票成长性比较-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_growth_comparison_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zh_growth_comparison_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_growth_comparison_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_valuation_comparison_em(symbol: str) -> dict:
+    """
+    获取股票估值比较-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_valuation_comparison_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zh_valuation_comparison_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_valuation_comparison_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_dupont_comparison_em(symbol: str) -> dict:
+    """
+    获取股票杜邦分析比较-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_dupont_comparison_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zh_dupont_comparison_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_dupont_comparison_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_scale_comparison_em(symbol: str) -> dict:
+    """
+    获取股票规模比较-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_scale_comparison_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zh_scale_comparison_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_scale_comparison_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_cdr_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
+    """
+    获取CDR历史数据-新浪
+    """
+    try:
+        from akshare_api import stock_zh_a_cdr_daily
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_zh_a_cdr_daily(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_cdr_daily 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_financial_abstract(symbol: str) -> dict:
+    """
+    获取财务报表数据
+    """
+    try:
+        from akshare_api import stock_financial_abstract
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_financial_abstract(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_financial_abstract 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_financial_analysis_indicator(symbol: str) -> dict:
+    """
+    获取财务指标数据
+    """
+    try:
+        from akshare_api import stock_financial_analysis_indicator
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_financial_analysis_indicator(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_financial_analysis_indicator 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_yjbb_em(date: str = "20220331") -> dict:
+    """
+    获取业绩报表数据
+    """
+    try:
+        from akshare_api import stock_yjbb_em
+        # 构建参数字典
+        kwargs = {}
+        if date is not None:
+            kwargs["date"] = date
+        df = stock_yjbb_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_yjbb_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hsgt_fund_flow_summary_em() -> dict:
+    """
+    获取沪深港通资金流向
+    """
+    try:
+        from akshare_api import stock_hsgt_fund_flow_summary_em
+        df = stock_hsgt_fund_flow_summary_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hsgt_fund_flow_summary_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_individual_fund_flow_rank() -> dict:
+    """
+    获取个股资金流向
+    """
+    try:
+        from akshare_api import stock_individual_fund_flow_rank
+        df = stock_individual_fund_flow_rank()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_individual_fund_flow_rank 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_profit_forecast_em() -> dict:
+    """
+    获取东方财富盈利预测
+    """
+    try:
+        from akshare_api import stock_profit_forecast_em
+        df = stock_profit_forecast_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_profit_forecast_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_profit_forecast_ths() -> dict:
+    """
+    获取同花顺盈利预测
+    """
+    try:
+        from akshare_api import stock_profit_forecast_ths
+        df = stock_profit_forecast_ths()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_profit_forecast_ths 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_concept_cons_ths() -> dict:
+    """
+    获取同花顺概念板块指数
+    """
+    try:
+        from akshare_api import stock_board_concept_cons_ths
+        df = stock_board_concept_cons_ths()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_concept_cons_ths 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_concept_name_em() -> dict:
+    """
+    获取东方财富概念板块
+    """
+    try:
+        from akshare_api import stock_board_concept_name_em
+        df = stock_board_concept_name_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_concept_name_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
+    """
+    获取概念板块历史行情
+    """
+    try:
+        from akshare_api import stock_board_concept_hist_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if period is not None:
+            kwargs["period"] = period
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_board_concept_hist_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_concept_hist_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_industry_name_ths() -> dict:
+    """
+    获取同花顺行业一览表
+    """
+    try:
+        from akshare_api import stock_board_industry_name_ths
+        df = stock_board_industry_name_ths()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_industry_name_ths 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_industry_name_em() -> dict:
+    """
+    获取东方财富行业板块
+    """
+    try:
+        from akshare_api import stock_board_industry_name_em
+        df = stock_board_industry_name_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_industry_name_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hot_rank_em() -> dict:
+    """
+    获取股票热度排行
+    """
+    try:
+        from akshare_api import stock_hot_rank_em
+        df = stock_hot_rank_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hot_rank_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_market_activity_em() -> dict:
+    """
+    获取盘口异动数据
+    """
+    try:
+        from akshare_api import stock_market_activity_em
+        df = stock_market_activity_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_market_activity_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_change_em() -> dict:
+    """
+    获取板块异动详情
+    """
+    try:
+        from akshare_api import stock_board_change_em
+        df = stock_board_change_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_change_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zt_pool_em() -> dict:
+    """
+    获取涨停股池
+    """
+    try:
+        from akshare_api import stock_zt_pool_em
+        df = stock_zt_pool_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zt_pool_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zt_pool_previous_em() -> dict:
+    """
+    获取昨日涨停股池
+    """
+    try:
+        from akshare_api import stock_zt_pool_previous_em
+        df = stock_zt_pool_previous_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zt_pool_previous_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_dt_pool_em() -> dict:
+    """
+    获取跌停股池
+    """
+    try:
+        from akshare_api import stock_dt_pool_em
+        df = stock_dt_pool_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_dt_pool_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417") -> dict:
+    """
+    获取龙虎榜详情
+    """
+    try:
+        from akshare_api import stock_lhb_detail_em
+        # 构建参数字典
+        kwargs = {}
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        df = stock_lhb_detail_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_lhb_detail_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_lhb_stock_statistic_em() -> dict:
+    """
+    获取个股上榜统计
+    """
+    try:
+        from akshare_api import stock_lhb_stock_statistic_em
+        df = stock_lhb_stock_statistic_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_lhb_stock_statistic_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_visit_em() -> dict:
+    """
+    获取机构调研统计
+    """
+    try:
+        from akshare_api import stock_institute_visit_em
+        df = stock_institute_visit_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_visit_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_visit_detail_em() -> dict:
+    """
+    获取机构调研详细
+    """
+    try:
+        from akshare_api import stock_institute_visit_detail_em
+        df = stock_institute_visit_detail_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_visit_detail_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
+    """
+    获取机构持股详情
+    """
+    try:
+        from akshare_api import stock_institute_hold_detail
+        # 构建参数字典
+        kwargs = {}
+        if stock is not None:
+            kwargs["stock"] = stock
+        if quarter is not None:
+            kwargs["quarter"] = quarter
+        df = stock_institute_hold_detail(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_hold_detail 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_recommend(symbol: str) -> dict:
+    """
+    获取机构推荐池
+    """
+    try:
+        from akshare_api import stock_institute_recommend
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_institute_recommend(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_recommend 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_recommend_detail(symbol: str) -> dict:
+    """
+    获取股票评级记录
+    """
+    try:
+        from akshare_api import stock_institute_recommend_detail
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_institute_recommend_detail(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_recommend_detail 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_research_report_em(symbol: str) -> dict:
+    """
+    获取个股研报
+    """
+    try:
+        from akshare_api import stock_research_report_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_research_report_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_research_report_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_info_cjzc_em() -> dict:
+    """
+    获取财经早餐
+    """
+    try:
+        from akshare_api import stock_info_cjzc_em
+        df = stock_info_cjzc_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_info_cjzc_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_info_global_em() -> dict:
+    """
+    获取全球财经快讯-东方财富
+    """
+    try:
+        from akshare_api import stock_info_global_em
+        df = stock_info_global_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_info_global_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_info_global_sina() -> dict:
+    """
+    获取全球财经快讯-新浪财经
+    """
+    try:
+        from akshare_api import stock_info_global_sina
+        df = stock_info_global_sina()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_info_global_sina 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_irm_cninfo(symbol: str) -> dict:
+    """
+    获取互动易-提问
+    """
+    try:
+        from akshare_api import stock_irm_cninfo
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_irm_cninfo(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_irm_cninfo 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_irm_ans_cninfo(symbol: str) -> dict:
+    """
+    获取互动易-回答
+    """
+    try:
+        from akshare_api import stock_irm_ans_cninfo
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_irm_ans_cninfo(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_irm_ans_cninfo 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_sns_sseinfo(symbol: str) -> dict:
+    """
+    获取上证e互动
+    """
+    try:
+        from akshare_api import stock_sns_sseinfo
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_sns_sseinfo(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_sns_sseinfo 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_b_spot_em() -> dict:
+    """
+    获取B股实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_b_spot_em
+        df = stock_zh_b_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_b_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_b_spot() -> dict:
+    """
+    获取B股实时行情-新浪
+    """
+    try:
+        from akshare_api import stock_zh_b_spot
+        df = stock_zh_b_spot()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_b_spot 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_b_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
+    """
+    获取B股历史行情数据-新浪
+    """
+    try:
+        from akshare_api import stock_zh_b_daily
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_zh_b_daily(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_b_daily 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_b_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
+    """
+    获取B股分时数据-新浪
+    """
+    try:
+        from akshare_api import stock_zh_b_minute
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if period is not None:
+            kwargs["period"] = period
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_zh_b_minute(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_b_minute 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hk_spot_em() -> dict:
+    """
+    获取港股实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_hk_spot_em
+        df = stock_hk_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hk_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hk_spot() -> dict:
+    """
+    获取港股实时行情-新浪
+    """
+    try:
+        from akshare_api import stock_hk_spot
+        df = stock_hk_spot()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hk_spot 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hk_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
+    """
+    获取港股历史行情数据-新浪
+    """
+    try:
+        from akshare_api import stock_hk_daily
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_hk_daily(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hk_daily 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_us_spot() -> dict:
+    """
+    获取美股实时行情-新浪
+    """
+    try:
+        from akshare_api import stock_us_spot
+        df = stock_us_spot()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_us_spot 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_us_spot_em() -> dict:
+    """
+    获取美股实时行情-东方财富
+    """
+    try:
+        from akshare_api import stock_us_spot_em
+        df = stock_us_spot_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_us_spot_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_us_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
+    """
+    获取美股历史行情数据-新浪
+    """
+    try:
+        from akshare_api import stock_us_daily
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_us_daily(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_us_daily 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_growth_comparison_em(symbol: str) -> dict:
+    """
+    获取股票成长性比较-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_growth_comparison_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zh_growth_comparison_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_growth_comparison_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_valuation_comparison_em(symbol: str) -> dict:
+    """
+    获取股票估值比较-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_valuation_comparison_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zh_valuation_comparison_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_valuation_comparison_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_dupont_comparison_em(symbol: str) -> dict:
+    """
+    获取股票杜邦分析比较-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_dupont_comparison_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zh_dupont_comparison_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_dupont_comparison_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_scale_comparison_em(symbol: str) -> dict:
+    """
+    获取股票规模比较-东方财富
+    """
+    try:
+        from akshare_api import stock_zh_scale_comparison_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zh_scale_comparison_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_scale_comparison_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zh_a_cdr_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
+    """
+    获取CDR历史数据-新浪
+    """
+    try:
+        from akshare_api import stock_zh_a_cdr_daily
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_zh_a_cdr_daily(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zh_a_cdr_daily 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_financial_abstract(symbol: str) -> dict:
+    """
+    获取财务报表数据
+    """
+    try:
+        from akshare_api import stock_financial_abstract
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_financial_abstract(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_financial_abstract 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_financial_analysis_indicator(symbol: str) -> dict:
+    """
+    获取财务指标数据
+    """
+    try:
+        from akshare_api import stock_financial_analysis_indicator
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_financial_analysis_indicator(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_financial_analysis_indicator 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_yjbb_em(date: str = "20220331") -> dict:
+    """
+    获取业绩报表数据
+    """
+    try:
+        from akshare_api import stock_yjbb_em
+        # 构建参数字典
+        kwargs = {}
+        if date is not None:
+            kwargs["date"] = date
+        df = stock_yjbb_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_yjbb_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hsgt_fund_flow_summary_em() -> dict:
+    """
+    获取沪深港通资金流向
+    """
+    try:
+        from akshare_api import stock_hsgt_fund_flow_summary_em
+        df = stock_hsgt_fund_flow_summary_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hsgt_fund_flow_summary_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_individual_fund_flow_rank() -> dict:
+    """
+    获取个股资金流向
+    """
+    try:
+        from akshare_api import stock_individual_fund_flow_rank
+        df = stock_individual_fund_flow_rank()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_individual_fund_flow_rank 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_profit_forecast_em() -> dict:
+    """
+    获取东方财富盈利预测
+    """
+    try:
+        from akshare_api import stock_profit_forecast_em
+        df = stock_profit_forecast_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_profit_forecast_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_profit_forecast_ths() -> dict:
+    """
+    获取同花顺盈利预测
+    """
+    try:
+        from akshare_api import stock_profit_forecast_ths
+        df = stock_profit_forecast_ths()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_profit_forecast_ths 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_concept_cons_ths() -> dict:
+    """
+    获取同花顺概念板块指数
+    """
+    try:
+        from akshare_api import stock_board_concept_cons_ths
+        df = stock_board_concept_cons_ths()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_concept_cons_ths 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_concept_name_em() -> dict:
+    """
+    获取东方财富概念板块
+    """
+    try:
+        from akshare_api import stock_board_concept_name_em
+        df = stock_board_concept_name_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_concept_name_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
+    """
+    获取概念板块历史行情
+    """
+    try:
+        from akshare_api import stock_board_concept_hist_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if period is not None:
+            kwargs["period"] = period
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_board_concept_hist_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_concept_hist_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_industry_name_ths() -> dict:
+    """
+    获取同花顺行业一览表
+    """
+    try:
+        from akshare_api import stock_board_industry_name_ths
+        df = stock_board_industry_name_ths()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_industry_name_ths 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_industry_name_em() -> dict:
+    """
+    获取东方财富行业板块
+    """
+    try:
+        from akshare_api import stock_board_industry_name_em
+        df = stock_board_industry_name_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_industry_name_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hot_rank_em() -> dict:
+    """
+    获取股票热度排行
+    """
+    try:
+        from akshare_api import stock_hot_rank_em
+        df = stock_hot_rank_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hot_rank_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_market_activity_em() -> dict:
+    """
+    获取盘口异动数据
+    """
+    try:
+        from akshare_api import stock_market_activity_em
+        df = stock_market_activity_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_market_activity_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_change_em() -> dict:
+    """
+    获取板块异动详情
+    """
+    try:
+        from akshare_api import stock_board_change_em
+        df = stock_board_change_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_change_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zt_pool_em() -> dict:
+    """
+    获取涨停股池
+    """
+    try:
+        from akshare_api import stock_zt_pool_em
+        df = stock_zt_pool_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zt_pool_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zt_pool_previous_em() -> dict:
+    """
+    获取昨日涨停股池
+    """
+    try:
+        from akshare_api import stock_zt_pool_previous_em
+        df = stock_zt_pool_previous_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zt_pool_previous_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_dt_pool_em() -> dict:
+    """
+    获取跌停股池
+    """
+    try:
+        from akshare_api import stock_dt_pool_em
+        df = stock_dt_pool_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_dt_pool_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417") -> dict:
+    """
+    获取龙虎榜详情
+    """
+    try:
+        from akshare_api import stock_lhb_detail_em
+        # 构建参数字典
+        kwargs = {}
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        df = stock_lhb_detail_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_lhb_detail_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_lhb_stock_statistic_em() -> dict:
+    """
+    获取个股上榜统计
+    """
+    try:
+        from akshare_api import stock_lhb_stock_statistic_em
+        df = stock_lhb_stock_statistic_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_lhb_stock_statistic_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_visit_em() -> dict:
+    """
+    获取机构调研统计
+    """
+    try:
+        from akshare_api import stock_institute_visit_em
+        df = stock_institute_visit_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_visit_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_visit_detail_em() -> dict:
+    """
+    获取机构调研详细
+    """
+    try:
+        from akshare_api import stock_institute_visit_detail_em
+        df = stock_institute_visit_detail_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_visit_detail_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
+    """
+    获取机构持股详情
+    """
+    try:
+        from akshare_api import stock_institute_hold_detail
+        # 构建参数字典
+        kwargs = {}
+        if stock is not None:
+            kwargs["stock"] = stock
+        if quarter is not None:
+            kwargs["quarter"] = quarter
+        df = stock_institute_hold_detail(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_hold_detail 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_recommend(symbol: str) -> dict:
+    """
+    获取机构推荐池
+    """
+    try:
+        from akshare_api import stock_institute_recommend
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_institute_recommend(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_recommend 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_institute_recommend_detail(symbol: str) -> dict:
+    """
+    获取股票评级记录
+    """
+    try:
+        from akshare_api import stock_institute_recommend_detail
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_institute_recommend_detail(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_institute_recommend_detail 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_research_report_em(symbol: str) -> dict:
+    """
+    获取个股研报
+    """
+    try:
+        from akshare_api import stock_research_report_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_research_report_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_research_report_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_info_cjzc_em() -> dict:
+    """
+    获取财经早餐
+    """
+    try:
+        from akshare_api import stock_info_cjzc_em
+        df = stock_info_cjzc_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_info_cjzc_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_info_global_em() -> dict:
+    """
+    获取全球财经快讯-东方财富
+    """
+    try:
+        from akshare_api import stock_info_global_em
+        df = stock_info_global_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_info_global_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_info_global_sina() -> dict:
+    """
+    获取全球财经快讯-新浪财经
+    """
+    try:
+        from akshare_api import stock_info_global_sina
+        df = stock_info_global_sina()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_info_global_sina 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_irm_cninfo(symbol: str) -> dict:
+    """
+    获取互动易-提问
+    """
+    try:
+        from akshare_api import stock_irm_cninfo
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_irm_cninfo(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_irm_cninfo 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_irm_ans_cninfo(symbol: str) -> dict:
+    """
+    获取互动易-回答
+    """
+    try:
+        from akshare_api import stock_irm_ans_cninfo
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_irm_ans_cninfo(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_irm_ans_cninfo 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_sns_sseinfo(symbol: str) -> dict:
+    """
+    获取上证e互动
+    """
+    try:
+        from akshare_api import stock_sns_sseinfo
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_sns_sseinfo(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_sns_sseinfo 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_market_activity_em() -> dict:
+    """
+    获取赚钱效应分析
+    """
+    try:
+        from akshare_api import stock_market_activity_em
+        df = stock_market_activity_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_market_activity_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zyjs_ths(symbol: str) -> dict:
+    """
+    获取主营介绍-同花顺
+    """
+    try:
+        from akshare_api import stock_zyjs_ths
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zyjs_ths(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zyjs_ths 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_zygc_em(symbol: str) -> dict:
+    """
+    获取主营构成-东方财富
+    """
+    try:
+        from akshare_api import stock_zygc_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_zygc_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_zygc_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_gsrl_gsdt_em(date: str) -> dict:
+    """
+    获取公司动态-东方财富
+    """
+    try:
+        from akshare_api import stock_gsrl_gsdt_em
+        # 构建参数字典
+        kwargs = {}
+        if date is not None:
+            kwargs["date"] = date
+        df = stock_gsrl_gsdt_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_gsrl_gsdt_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_dividend_cninfo(symbol: str) -> dict:
+    """
+    获取历史分红-巨潮资讯
+    """
+    try:
+        from akshare_api import stock_dividend_cninfo
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_dividend_cninfo(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_dividend_cninfo 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_news_em(symbol: str) -> dict:
+    """
+    获取个股新闻-东方财富
+    """
+    try:
+        from akshare_api import stock_news_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_news_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_news_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_news_main_cx() -> dict:
+    """
+    获取财经内容精选-财新网
+    """
+    try:
+        from akshare_api import stock_news_main_cx
+        df = stock_news_main_cx()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_news_main_cx 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_financial_report_sina(stock: str, indicator: str) -> dict:
+    """
+    获取财务报表-新浪
+    """
+    try:
+        from akshare_api import stock_financial_report_sina
+        # 构建参数字典
+        kwargs = {}
+        if stock is not None:
+            kwargs["stock"] = stock
+        if indicator is not None:
+            kwargs["indicator"] = indicator
+        df = stock_financial_report_sina(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_financial_report_sina 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_yjkb_em(date: str) -> dict:
+    """
+    获取业绩快报-东方财富
+    """
+    try:
+        from akshare_api import stock_yjkb_em
+        # 构建参数字典
+        kwargs = {}
+        if date is not None:
+            kwargs["date"] = date
+        df = stock_yjkb_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_yjkb_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_yjyg_em(date: str) -> dict:
+    """
+    获取业绩预告-东方财富
+    """
+    try:
+        from akshare_api import stock_yjyg_em
+        # 构建参数字典
+        kwargs = {}
+        if date is not None:
+            kwargs["date"] = date
+        df = stock_yjyg_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_yjyg_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_yysj_em(symbol: str, date: str) -> dict:
+    """
+    获取预约披露时间-东方财富
+    """
+    try:
+        from akshare_api import stock_yysj_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if date is not None:
+            kwargs["date"] = date
+        df = stock_yysj_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_yysj_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_concept_cons_em(symbol: str) -> dict:
+    """
+    获取概念板块成分股-东方财富
+    """
+    try:
+        from akshare_api import stock_board_concept_cons_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_board_concept_cons_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_concept_cons_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
+    """
+    获取概念板块指数-东方财富
+    """
+    try:
+        from akshare_api import stock_board_concept_hist_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if period is not None:
+            kwargs["period"] = period
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_board_concept_hist_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_concept_hist_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_industry_cons_em(symbol: str) -> dict:
+    """
+    获取行业板块成分股-东方财富
+    """
+    try:
+        from akshare_api import stock_board_industry_cons_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_board_industry_cons_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_industry_cons_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_board_industry_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
+    """
+    获取行业板块指数-东方财富
+    """
+    try:
+        from akshare_api import stock_board_industry_hist_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        if period is not None:
+            kwargs["period"] = period
+        if start_date is not None:
+            kwargs["start_date"] = start_date
+        if end_date is not None:
+            kwargs["end_date"] = end_date
+        if adjust is not None:
+            kwargs["adjust"] = adjust
+        df = stock_board_industry_hist_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_board_industry_hist_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hot_follow_xq(symbol: str) -> dict:
+    """
+    获取股票热度-雪球关注排行榜
+    """
+    try:
+        from akshare_api import stock_hot_follow_xq
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_hot_follow_xq(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hot_follow_xq 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hot_rank_detail_em(symbol: str) -> dict:
+    """
+    获取历史趋势及粉丝特征-东方财富
+    """
+    try:
+        from akshare_api import stock_hot_rank_detail_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_hot_rank_detail_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hot_rank_detail_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hot_rank_detail_xq(symbol: str) -> dict:
+    """
+    获取个股人气榜-实时变动
+    """
+    try:
+        from akshare_api import stock_hot_rank_detail_xq
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_hot_rank_detail_xq(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hot_rank_detail_xq 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hot_rank_latest_em() -> dict:
+    """
+    获取个股人气榜-最新排名
+    """
+    try:
+        from akshare_api import stock_hot_rank_latest_em
+        df = stock_hot_rank_latest_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hot_rank_latest_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hot_keyword_em() -> dict:
+    """
+    获取热门关键词-东方财富
+    """
+    try:
+        from akshare_api import stock_hot_keyword_em
+        df = stock_hot_keyword_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hot_keyword_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hot_search_em() -> dict:
+    """
+    获取热搜股票-东方财富
+    """
+    try:
+        from akshare_api import stock_hot_search_em
+        df = stock_hot_search_em()
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hot_search_em 执行失败: {e}")
+        return format_error_response(e)
+
+@mcp.tool()
+def stock_hot_related_em(symbol: str) -> dict:
+    """
+    获取相关股票-东方财富
+    """
+    try:
+        from akshare_api import stock_hot_related_em
+        # 构建参数字典
+        kwargs = {}
+        if symbol is not None:
+            kwargs["symbol"] = symbol
+        df = stock_hot_related_em(**kwargs)
+        return dataframe_to_mcp_result(df)
+    except Exception as e:
+        logger.error(f"stock_hot_related_em 执行失败: {e}")
+        return format_error_response(e)
+
 
 
 # 启动服务器
