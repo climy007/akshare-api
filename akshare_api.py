@@ -103,9 +103,12 @@ def stock_zh_a_spot():
     return call_aktools_api("/api/public/stock_zh_a_spot")
 
 
-def stock_individual_spot_xq(symbol):
+def stock_individual_spot_xq(symbol, token=None):
     """获取个股实时行情-雪球"""
-    return call_aktools_api("/api/public/stock_individual_spot_xq", params={"symbol": symbol})
+    params = {"symbol": symbol}
+    if token:
+        params["token"] = token
+    return call_aktools_api("/api/public/stock_individual_spot_xq", params=params)
 
 
 # 1.5 历史行情数据 (3个)

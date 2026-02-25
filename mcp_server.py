@@ -5,10 +5,14 @@ AKShare MCP 服务器
 """
 from fastmcp import FastMCP
 import logging
+import os
+import re
 import sys
+import requests
 
 # 导入配置
 from config import (
+    AKTOOLS_BASE_URL,
     MCP_SERVER_NAME,
     MCP_SERVER_VERSION,
     MCP_SERVER_PORT,
@@ -29,6 +33,56 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+RUNTIME_XQ_TOKEN = os.getenv("XQ_A_TOKEN", "").strip()
+
+
+def _mask_token(token: str) -> str:
+    if len(token) <= 8:
+        return "*" * len(token)
+    return f"{token[:4]}...{token[-4:]}"
+
+
+def _extract_xq_token_from_cookie(cookie: str) -> str | None:
+    if not cookie:
+        return None
+    match = re.search(r"(?:^|;\s*)xq_a_token=([^;]+)", cookie)
+    if not match:
+        return None
+    return match.group(1).strip()
+
+
+def _xq_probe(symbol: str, timeout: float = 12.0, token: str | None = None) -> dict:
+    params = {"symbol": symbol}
+    if token:
+        params["token"] = token
+    url = f"{AKTOOLS_BASE_URL.rstrip('/')}/api/public/stock_individual_spot_xq"
+    try:
+        resp = requests.get(url, params=params, timeout=timeout)
+    except Exception as e:
+        return {
+            "ok": False,
+            "status_code": 0,
+            "rows": 0,
+            "message": repr(e),
+            "token_used": bool(token),
+        }
+
+    body_preview = resp.text[:300]
+    rows = 0
+    if resp.status_code == 200:
+        try:
+            payload = resp.json()
+            if isinstance(payload, list):
+                rows = len(payload)
+        except ValueError:
+            pass
+    return {
+        "ok": resp.status_code == 200 and rows > 0,
+        "status_code": resp.status_code,
+        "rows": rows,
+        "message": body_preview,
+        "token_used": bool(token),
+    }
 
 # 创建 FastMCP 服务器
 mcp = FastMCP(
@@ -309,7 +363,7 @@ def stock_zh_a_spot() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
-def stock_individual_spot_xq(symbol: str) -> dict:
+def stock_individual_spot_xq(symbol: str, token: str = None) -> dict:
     """
     获取个股实时行情-雪球
 
@@ -324,10 +378,103 @@ def stock_individual_spot_xq(symbol: str) -> dict:
         kwargs = {}
         if symbol is not None:
             kwargs["symbol"] = symbol
+        effective_token = token if token else RUNTIME_XQ_TOKEN
+        if effective_token:
+            kwargs["token"] = effective_token
         df = stock_individual_spot_xq(**kwargs)
         return dataframe_to_mcp_result(df)
     except Exception as e:
         logger.error(f"stock_individual_spot_xq 执行失败: {e}")
+        return format_error_response(e)
+
+
+@mcp.tool()
+def xq_token_health_check(symbol: str = "SH600000", timeout: float = 12.0) -> dict:
+    """
+    手动检测雪球 token 是否可用
+
+    参数说明:
+    - symbol: str, 可选, 默认"SH600000"
+      参数格式: 带市场前缀的股票代码，如"SH600000"
+    - timeout: float, 可选, 默认12.0
+      参数格式: 请求超时秒数
+    """
+    try:
+        no_token_result = _xq_probe(symbol=symbol, timeout=timeout, token=None)
+        runtime_result = None
+        if RUNTIME_XQ_TOKEN:
+            runtime_result = _xq_probe(symbol=symbol, timeout=timeout, token=RUNTIME_XQ_TOKEN)
+
+        current_ok = runtime_result["ok"] if runtime_result is not None else no_token_result["ok"]
+        message = "runtime token healthy" if current_ok else "token may be expired or invalid"
+        return {
+            "success": current_ok,
+            "message": message,
+            "rows": 1 if current_ok else 0,
+            "columns": ["probe", "status_code", "rows", "ok", "token_used"],
+            "data": [
+                {"probe": "without_runtime_token", **no_token_result},
+                *([{"probe": "with_runtime_token", **runtime_result}] if runtime_result else []),
+            ],
+            "runtime_token_set": bool(RUNTIME_XQ_TOKEN),
+            "runtime_token_masked": _mask_token(RUNTIME_XQ_TOKEN) if RUNTIME_XQ_TOKEN else "",
+        }
+    except Exception as e:
+        logger.error(f"xq_token_health_check 执行失败: {e}")
+        return format_error_response(e)
+
+
+@mcp.tool()
+def xq_token_update(token: str = "", cookie: str = "", verify_symbol: str = "SH600000", timeout: float = 12.0) -> dict:
+    """
+    手动更新运行时雪球 token（仅作用于当前 mcp 进程）
+
+    参数说明:
+    - token: str, 可选
+      参数格式: xq_a_token 字符串
+    - cookie: str, 可选
+      参数格式: 完整 Cookie 字符串，工具会自动提取 xq_a_token
+    - verify_symbol: str, 可选, 默认"SH600000"
+      参数格式: 验证用股票代码
+    - timeout: float, 可选, 默认12.0
+      参数格式: 请求超时秒数
+    """
+    global RUNTIME_XQ_TOKEN
+    try:
+        new_token = token.strip() if token else ""
+        if not new_token and cookie:
+            extracted = _extract_xq_token_from_cookie(cookie)
+            if extracted:
+                new_token = extracted
+        if not new_token:
+            return {
+                "success": False,
+                "message": "未提供有效 token，请传 token 或包含 xq_a_token 的 cookie",
+                "rows": 0,
+                "columns": [],
+                "data": [],
+            }
+
+        RUNTIME_XQ_TOKEN = new_token
+        verify_result = _xq_probe(symbol=verify_symbol, timeout=timeout, token=RUNTIME_XQ_TOKEN)
+        return {
+            "success": verify_result["ok"],
+            "message": "runtime token updated",
+            "rows": 1 if verify_result["ok"] else 0,
+            "columns": ["symbol", "status_code", "rows", "ok"],
+            "data": [
+                {
+                    "symbol": verify_symbol,
+                    "status_code": verify_result["status_code"],
+                    "rows": verify_result["rows"],
+                    "ok": verify_result["ok"],
+                }
+            ],
+            "runtime_token_masked": _mask_token(RUNTIME_XQ_TOKEN),
+            "verify_preview": verify_result["message"],
+        }
+    except Exception as e:
+        logger.error(f"xq_token_update 执行失败: {e}")
         return format_error_response(e)
 
 @mcp.tool()

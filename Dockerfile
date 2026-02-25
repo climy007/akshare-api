@@ -30,6 +30,7 @@ COPY stock_*.py ./
 COPY config.py ./config.py
 COPY mcp_server.py ./mcp_server.py
 COPY mcp_utils.py ./mcp_utils.py
+COPY ops ./ops
 
 # Create directory for AKTools if needed
 RUN mkdir -p /var/log/aktools

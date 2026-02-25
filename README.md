@@ -478,6 +478,14 @@ python mcp_server.py
 
 详细使用指南请参考：[MCP 服务器使用指南](docs/MCP_SERVER_GUIDE.md)
 
+### 雪球 Token 自动检测与修复
+
+项目已提供 MCP 手动修复方案（手动检测 + 手动更新 + 立即验证）：
+
+- 文档：`docs/XQ_TOKEN_AUTO_RECOVERY.md`
+- MCP 工具：`xq_token_health_check`
+- MCP 工具：`xq_token_update`
+
 ## 更新日志
 
 ### 🆕 v2.0.0 (最新版本)
