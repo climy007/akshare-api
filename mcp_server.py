@@ -110,7 +110,7 @@ AKShare 股票数据接口 MCP 服务器 v{MCP_SERVER_VERSION}
 @mcp.tool()
 def stock_sse_summary() -> dict:
     """
-    获取上海证券交易所总貌数据
+    上海证券交易所-股票数据总貌
     """
     try:
         from akshare_api import stock_sse_summary
@@ -123,7 +123,7 @@ def stock_sse_summary() -> dict:
 @mcp.tool()
 def stock_szse_summary() -> dict:
     """
-    获取深圳证券交易所总貌数据
+    深圳证券交易所-市场总貌-证券类别统计
     """
     try:
         from akshare_api import stock_szse_summary
@@ -136,7 +136,7 @@ def stock_szse_summary() -> dict:
 @mcp.tool()
 def stock_szse_area_summary() -> dict:
     """
-    获取深圳证券交易所地区交易排序数据
+    深圳证券交易所-市场总貌-地区交易排序
     """
     try:
         from akshare_api import stock_szse_area_summary
@@ -149,11 +149,11 @@ def stock_szse_area_summary() -> dict:
 @mcp.tool()
 def stock_szse_sector_summary(symbol: str = "当年") -> dict:
     """
-    获取深圳证券交易所股票行业成交数据
+    深圳证券交易所-统计资料-股票行业成交数据
 
     参数说明:
-    - symbol: str, 可选, 默认"当年"
-      参数格式: 字符串类型，可选值如"当年"、"近一年"、"近三年"等时间范围描述
+    - symbol: str
+      symbol="当月"; choice of {"当月", "当年"}
     """
     try:
         from akshare_api import stock_szse_sector_summary
@@ -170,7 +170,7 @@ def stock_szse_sector_summary(symbol: str = "当年") -> dict:
 @mcp.tool()
 def stock_sse_deal_daily() -> dict:
     """
-    获取上海证券交易所每日概况数据
+    上海证券交易所-数据-股票数据-成交概况-股票成交概况-每日股票情况
     """
     try:
         from akshare_api import stock_sse_deal_daily
@@ -183,12 +183,11 @@ def stock_sse_deal_daily() -> dict:
 @mcp.tool()
 def stock_individual_info_em(symbol: str) -> dict:
     """
-    获取个股信息查询-东方财富
+    东方财富-个股-股票信息
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 6位股票代码，如"000001"、"603777"
-      说明: 股票代码可以在stock_zh_a_spot_em()中获取
+    - symbol: str
+      symbol="603777"; 股票代码
     """
     try:
         from akshare_api import stock_individual_info_em
@@ -205,12 +204,11 @@ def stock_individual_info_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_individual_basic_info_xq(symbol: str) -> dict:
     """
-    获取个股信息查询-雪球
+    雪球财经-个股-公司概况-公司简介
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 带市场前缀的股票代码，如"SH601127"、"SZ000001"
-      说明: 市场前缀包括SH(上海)、SZ(深圳)、BJ(北京)
+    - symbol: str
+      symbol="SH601127"; 股票代码
     """
     try:
         from akshare_api import stock_individual_basic_info_xq
@@ -227,11 +225,11 @@ def stock_individual_basic_info_xq(symbol: str) -> dict:
 @mcp.tool()
 def stock_bid_ask_em(symbol: str) -> dict:
     """
-    获取行情报价-东方财富
+    东方财富-行情报价
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 6位股票代码，如"000001"、"603777"
+    - symbol: str
+      symbol="000001"; 股票代码
     """
     try:
         from akshare_api import stock_bid_ask_em
@@ -248,7 +246,7 @@ def stock_bid_ask_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_a_spot_em() -> dict:
     """
-    获取沪深京A股实时行情-东方财富
+    东方财富网-沪深京 A 股-实时行情数据
     """
     try:
         from akshare_api import stock_zh_a_spot_em
@@ -261,7 +259,7 @@ def stock_zh_a_spot_em() -> dict:
 @mcp.tool()
 def stock_sh_a_spot_em() -> dict:
     """
-    获取沪A股实时行情-东方财富
+    东方财富网-沪 A 股-实时行情数据
     """
     try:
         from akshare_api import stock_sh_a_spot_em
@@ -274,7 +272,7 @@ def stock_sh_a_spot_em() -> dict:
 @mcp.tool()
 def stock_sz_a_spot_em() -> dict:
     """
-    获取深A股实时行情-东方财富
+    东方财富网-深 A 股-实时行情数据
     """
     try:
         from akshare_api import stock_sz_a_spot_em
@@ -287,7 +285,7 @@ def stock_sz_a_spot_em() -> dict:
 @mcp.tool()
 def stock_bj_a_spot_em() -> dict:
     """
-    获取京A股实时行情-东方财富
+    东方财富网-京 A 股-实时行情数据
     """
     try:
         from akshare_api import stock_bj_a_spot_em
@@ -300,7 +298,7 @@ def stock_bj_a_spot_em() -> dict:
 @mcp.tool()
 def stock_new_a_spot_em() -> dict:
     """
-    获取新股实时行情-东方财富
+    东方财富网-新股-实时行情数据
     """
     try:
         from akshare_api import stock_new_a_spot_em
@@ -313,7 +311,7 @@ def stock_new_a_spot_em() -> dict:
 @mcp.tool()
 def stock_cy_a_spot_em() -> dict:
     """
-    获取创业板实时行情-东方财富
+    东方财富网-创业板-实时行情
     """
     try:
         from akshare_api import stock_cy_a_spot_em
@@ -326,7 +324,7 @@ def stock_cy_a_spot_em() -> dict:
 @mcp.tool()
 def stock_kc_a_spot_em() -> dict:
     """
-    获取科创板实时行情-东方财富
+    东方财富网-科创板-实时行情
     """
     try:
         from akshare_api import stock_kc_a_spot_em
@@ -339,7 +337,7 @@ def stock_kc_a_spot_em() -> dict:
 @mcp.tool()
 def stock_zh_ab_comparison_em() -> dict:
     """
-    获取AB股比价-东方财富
+    东方财富网-行情中心-沪深京个股-AB股比价-全部AB股比价
     """
     try:
         from akshare_api import stock_zh_ab_comparison_em
@@ -352,7 +350,7 @@ def stock_zh_ab_comparison_em() -> dict:
 @mcp.tool()
 def stock_zh_a_spot() -> dict:
     """
-    获取沪深京A股实时行情-新浪
+    新浪财经-沪深京 A 股数据, 重复运行本函数会被新浪暂时封 IP, 建议增加时间间隔
     """
     try:
         from akshare_api import stock_zh_a_spot
@@ -365,12 +363,13 @@ def stock_zh_a_spot() -> dict:
 @mcp.tool()
 def stock_individual_spot_xq(symbol: str, token: str = None) -> dict:
     """
-    获取个股实时行情-雪球
+    雪球-行情中心-个股
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 带市场前缀的股票代码，如"SH600000"、"SZ000001"
-      说明: 市场前缀包括SH(上海)、SZ(深圳)、BJ(北京)
+    - symbol: str
+      symbol="SH600000"; 证券代码，可以是 A 股个股代码，A 股场内基金代码，A 股指数，美股代码, 美股指数
+    - token: str, 可选
+      token=None; 默认不设置 token（可传雪球 xq_a_token 以访问需登录的数据）
     """
     try:
         from akshare_api import stock_individual_spot_xq
@@ -480,31 +479,21 @@ def xq_token_update(token: str = "", cookie: str = "", verify_symbol: str = "SH6
 @mcp.tool()
 def stock_zh_a_hist(symbol: str, period: str = "daily", start_date: str = "20210301", end_date: str = "20210616", adjust: str = "", timeout: str = None) -> dict:
     """
-    获取历史行情数据-东方财富
+    东方财富-沪深京 A 股日频率数据; 历史数据按日频率更新, 当日收盘价请在收盘后获取
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 6位股票代码，如"000001"、"603777"
-
-    - period: str, 可选, 默认"daily"
-      参数格式: 字符串类型，可选值: "daily"(日线)、"weekly"(周线)、"monthly"(月线)
-
-    - start_date: str, 可选, 默认"20210301"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20210301"
-
-    - end_date: str, 可选, 默认"20210616"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20210616"
-
-    - adjust: str, 可选, 默认""(不复权)
-      参数格式: 字符串类型
-      可选值:
-      - "": 不复权(默认)
-      - "qfq": 前复权
-      - "hfq": 后复权
-
-    - timeout: str, 可选, 默认None
-      参数格式: 浮点数，单位为秒
-      说明: 默认不设置超时参数
+    - symbol: str
+      symbol='603777'; 股票代码可以在 ak.stock_zh_a_spot_em() 中获取
+    - period: str
+      period='daily'; choice of {'daily', 'weekly', 'monthly'}
+    - start_date: str
+      start_date='20210301'; 开始查询的日期
+    - end_date: str
+      end_date='20210616'; 结束查询的日期
+    - adjust: str
+      默认返回不复权的数据; qfq: 返回前复权后的数据; hfq: 返回后复权后的数据
+    - timeout: float
+      timeout=None; 默认不设置超时参数
     """
     try:
         from akshare_api import stock_zh_a_hist
@@ -531,26 +520,17 @@ def stock_zh_a_hist(symbol: str, period: str = "daily", start_date: str = "20210
 @mcp.tool()
 def stock_zh_a_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
-    获取历史行情数据-新浪
+    新浪财经-沪深京 A 股的数据, 历史数据按日频率更新; 注意其中的 sh689009 为 CDR, 请 通过 ak.stock_zh_a_cdr_daily 接口获取
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 带市场前缀的股票代码，如"sh600000"、"sz000001"
-
-    - start_date: str, 可选, 默认"20201103"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20201103"
-
-    - end_date: str, 可选, 默认"20201116"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20201116"
-
-    - adjust: str, 可选, 默认""(不复权)
-      参数格式: 字符串类型
-      可选值:
-      - "": 不复权(默认)
-      - "qfq": 前复权
-      - "hfq": 后复权
-      - "qfq-factor": 前复权因子
-      - "hfq-factor": 后复权因子
+    - symbol: str
+      symbol='sh600000'; 股票代码可以在 ak.stock_zh_a_spot() 中获取
+    - start_date: str
+      start_date='20201103'; 开始查询的日期
+    - end_date: str
+      end_date='20201116'; 结束查询的日期
+    - adjust: str
+      默认返回不复权的数据; qfq: 返回前复权后的数据; hfq: 返回后复权后的数据; hfq-factor: 返回后复权因子; qfq-factor: 返回前复权因子
     """
     try:
         from akshare_api import stock_zh_a_daily
@@ -573,7 +553,17 @@ def stock_zh_a_daily(symbol: str, start_date: str = "20201103", end_date: str = 
 @mcp.tool()
 def stock_zh_a_hist_tx(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
-    获取历史行情数据-腾讯
+    腾讯证券-日频-股票历史数据; 历史数据按日频率更新, 当日收盘价请在收盘后获取
+
+    参数说明:
+    - symbol: str
+      symbol='sz000001'; 带市场标识
+    - start_date: str
+      start_date='19000101'; 开始查询的日期
+    - end_date: str
+      end_date='20500101'; 结束查询的日期
+    - adjust: str
+      默认返回不复权的数据; qfq: 返回前复权后的数据; hfq: 返回后复权后的数据
     """
     try:
         from akshare_api import stock_zh_a_hist_tx
@@ -596,19 +586,15 @@ def stock_zh_a_hist_tx(symbol: str, start_date: str = "20201103", end_date: str 
 @mcp.tool()
 def stock_zh_a_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
     """
-    获取分时数据-新浪
+    新浪财经-沪深京 A 股股票或者指数的分时数据，目前可以获取 1, 5, 15, 30, 60 分钟的数据频率, 可以指定是否复权
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 带市场前缀的股票代码，如"sh600519"、"sz000001"
-
-    - period: str, 可选, 默认"1"
-      参数格式: 数字字符串，表示分钟间隔
-      可选值: "1"(1分钟)、"5"(5分钟)、"15"(15分钟)、"30"(30分钟)、"60"(60分钟)
-
-    - adjust: str, 可选, 默认""(不复权)
-      参数格式: 字符串类型
-      可选值: ""(不复权)、"qfq"(前复权)
+    - symbol: str
+      symbol='sh000300'; 同日频率数据接口
+    - period: str
+      period='1'; 获取 1, 5, 15, 30, 60 分钟的数据频率
+    - adjust: str
+      adjust=""; 默认为空: 返回不复权的数据; qfq: 返回前复权后的数据; hfq: 返回后复权后的数据;
     """
     try:
         from akshare_api import stock_zh_a_minute
@@ -629,25 +615,19 @@ def stock_zh_a_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
 @mcp.tool()
 def stock_zh_a_hist_min_em(symbol: str, period: str = "1", start_date: str = "2021-09-01 09:30:00", end_date: str = "2021-09-01 15:00:00", adjust: str = "") -> dict:
     """
-    获取分时数据-东方财富
+    东方财富网-行情首页-沪深京 A 股-每日分时行情; 该接口只能获取近期的分时数据，注意时间周期的设置
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 6位股票代码，如"000001"、"603777"
-
-    - period: str, 可选, 默认"1"
-      参数格式: 数字字符串，表示分钟间隔
-      可选值: "1"(1分钟)、"5"(5分钟)、"15"(15分钟)、"30"(30分钟)、"60"(60分钟)
-
-    - start_date: str, 可选, 默认"2021-09-01 09:30:00"
-      参数格式: 日期时间字符串，格式"YYYY-MM-DD HH:MM:SS"，如"2021-09-01 09:30:00"
-
-    - end_date: str, 可选, 默认"2021-09-01 15:00:00"
-      参数格式: 日期时间字符串，格式"YYYY-MM-DD HH:MM:SS"，如"2021-09-01 15:00:00"
-
-    - adjust: str, 可选, 默认""(不复权)
-      参数格式: 字符串类型
-      可选值: ""(不复权)、"qfq"(前复权)
+    - symbol: str
+      symbol='000300'; 股票代码
+    - period: str
+      period='5'; choice of {'1', '5', '15', '30', '60'}; 其中 1 分钟数据返回近 5 个交易日数据且不复权
+    - start_date: str
+      start_date="1979-09-01 09:32:00"; 日期时间; 默认返回所有数据
+    - end_date: str
+      end_date="2222-01-01 09:32:00"; 日期时间; 默认返回所有数据
+    - adjust: str
+      adjust=''; choice of {'', 'qfq', 'hfq'}; '': 不复权, 'qfq': 前复权, 'hfq': 后复权, 其中 1 分钟数据返回近 5 个交易日数据且不复权
     """
     try:
         from akshare_api import stock_zh_a_hist_min_em
@@ -672,7 +652,11 @@ def stock_zh_a_hist_min_em(symbol: str, period: str = "1", start_date: str = "20
 @mcp.tool()
 def stock_intraday_em(symbol: str) -> dict:
     """
-    获取日内分时数据-东方财富
+    东方财富-分时数据
+
+    参数说明:
+    - symbol: str
+      symbol="000001"; 股票代码
     """
     try:
         from akshare_api import stock_intraday_em
@@ -689,7 +673,11 @@ def stock_intraday_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_intraday_sina(symbol: str) -> dict:
     """
-    获取日内分时数据-新浪
+    新浪财经-日内分时数据
+
+    参数说明:
+    - symbol: str
+      symbol="sz000001"; 带市场标识的股票代码
     """
     try:
         from akshare_api import stock_intraday_sina
@@ -706,7 +694,11 @@ def stock_intraday_sina(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_a_hist_pre_min_em(symbol: str) -> dict:
     """
-    获取盘前数据-东方财富
+    东方财富-股票行情-盘前数据
+
+    参数说明:
+    - symbol: str
+      symbol="000001"; 股票代码
     """
     try:
         from akshare_api import stock_zh_a_hist_pre_min_em
@@ -723,14 +715,7 @@ def stock_zh_a_hist_pre_min_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_a_tick_tx(symbol: str, trade_date: str = "20210316") -> dict:
     """
-    获取历史分笔数据-腾讯
-
-    参数说明:
-    - symbol: str, 必需
-      参数格式: 带市场前缀的股票代码，如"sh600519"、"sz000001"
-
-    - trade_date: str, 可选, 默认"20210316"
-      参数格式: 8位数字字符串，格式YYYYMMDD，表示交易日期，如"20210316"
+    每个交易日 16:00 提供当日数据; 如遇到数据缺失, 请使用 ak.stock_zh_a_tick_163() 接口(注意数据会有一定差异)
     """
     try:
         from akshare_api import stock_zh_a_tick_tx
@@ -749,7 +734,11 @@ def stock_zh_a_tick_tx(symbol: str, trade_date: str = "20210316") -> dict:
 @mcp.tool()
 def stock_zh_growth_comparison_em(symbol: str) -> dict:
     """
-    获取股票成长性比较-东方财富
+    东方财富-行情中心-同行比较-成长性比较
+
+    参数说明:
+    - symbol: str
+      symbol="SZ000895"
     """
     try:
         from akshare_api import stock_zh_growth_comparison_em
@@ -766,7 +755,11 @@ def stock_zh_growth_comparison_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_valuation_comparison_em(symbol: str) -> dict:
     """
-    获取股票估值比较-东方财富
+    东方财富-行情中心-同行比较-估值比较
+
+    参数说明:
+    - symbol: str
+      symbol="SZ000895"
     """
     try:
         from akshare_api import stock_zh_valuation_comparison_em
@@ -783,7 +776,11 @@ def stock_zh_valuation_comparison_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_dupont_comparison_em(symbol: str) -> dict:
     """
-    获取股票杜邦分析比较-东方财富
+    东方财富-行情中心-同行比较-杜邦分析比较
+
+    参数说明:
+    - symbol: str
+      symbol="SZ000895"
     """
     try:
         from akshare_api import stock_zh_dupont_comparison_em
@@ -800,7 +797,11 @@ def stock_zh_dupont_comparison_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_scale_comparison_em(symbol: str) -> dict:
     """
-    获取股票规模比较-东方财富
+    东方财富-行情中心-同行比较-公司规模
+
+    参数说明:
+    - symbol: str
+      symbol="SZ000895"
     """
     try:
         from akshare_api import stock_zh_scale_comparison_em
@@ -817,7 +818,15 @@ def stock_zh_scale_comparison_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_a_cdr_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
-    获取CDR历史数据-新浪
+    上海证券交易所-科创板-CDR
+
+    参数说明:
+    - symbol: str
+      symbol='sh689009'; CDR 股票代码
+    - start_date: str
+      start_date='20201103'
+    - end_date: str
+      end_date='20201116'
     """
     try:
         from akshare_api import stock_zh_a_cdr_daily
@@ -840,7 +849,11 @@ def stock_zh_a_cdr_daily(symbol: str, start_date: str = "20201103", end_date: st
 @mcp.tool()
 def stock_financial_abstract(symbol: str) -> dict:
     """
-    获取财务报表数据
+    新浪财经-财务报表-关键指标
+
+    参数说明:
+    - symbol: str
+      symbol="600004"; 股票代码
     """
     try:
         from akshare_api import stock_financial_abstract
@@ -857,7 +870,11 @@ def stock_financial_abstract(symbol: str) -> dict:
 @mcp.tool()
 def stock_financial_analysis_indicator(symbol: str) -> dict:
     """
-    获取财务指标数据
+    新浪财经-财务分析-财务指标
+
+    参数说明:
+    - symbol: str
+      symbol="600004"; 股票代码
     """
     try:
         from akshare_api import stock_financial_analysis_indicator
@@ -874,12 +891,11 @@ def stock_financial_analysis_indicator(symbol: str) -> dict:
 @mcp.tool()
 def stock_yjbb_em(date: str = "20220331") -> dict:
     """
-    获取业绩报表数据
+    东方财富-数据中心-年报季报-业绩报表
 
     参数说明:
-    - date: str, 可选, 默认"20220331"
-      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
-      常用值: "20220331"(一季度)、"20220630"(二季度)、"20220930"(三季度)、"20221231"(四季度)
+    - date: str
+      date="20200331"; choice of {"XXXX0331", "XXXX0630", "XXXX0930", "XXXX1231"}; 从 20100331 开始
     """
     try:
         from akshare_api import stock_yjbb_em
@@ -896,7 +912,7 @@ def stock_yjbb_em(date: str = "20220331") -> dict:
 @mcp.tool()
 def stock_hsgt_fund_flow_summary_em() -> dict:
     """
-    获取沪深港通资金流向
+    东方财富网-数据中心-资金流向-沪深港通资金流向
     """
     try:
         from akshare_api import stock_hsgt_fund_flow_summary_em
@@ -909,7 +925,7 @@ def stock_hsgt_fund_flow_summary_em() -> dict:
 @mcp.tool()
 def stock_individual_fund_flow_rank() -> dict:
     """
-    获取个股资金流向
+    东方财富网-数据中心-资金流向-排名
     """
     try:
         from akshare_api import stock_individual_fund_flow_rank
@@ -922,7 +938,7 @@ def stock_individual_fund_flow_rank() -> dict:
 @mcp.tool()
 def stock_profit_forecast_em() -> dict:
     """
-    获取东方财富盈利预测
+    东方财富网-数据中心-研究报告-盈利预测; 该数据源网页端返回数据有异常, 本接口已修复该异常
     """
     try:
         from akshare_api import stock_profit_forecast_em
@@ -935,7 +951,7 @@ def stock_profit_forecast_em() -> dict:
 @mcp.tool()
 def stock_profit_forecast_ths() -> dict:
     """
-    获取同花顺盈利预测
+    同花顺-盈利预测
     """
     try:
         from akshare_api import stock_profit_forecast_ths
@@ -961,7 +977,7 @@ def stock_board_concept_cons_ths() -> dict:
 @mcp.tool()
 def stock_board_concept_name_em() -> dict:
     """
-    获取东方财富概念板块
+    东方财富网-行情中心-沪深京板块-概念板块
     """
     try:
         from akshare_api import stock_board_concept_name_em
@@ -974,26 +990,19 @@ def stock_board_concept_name_em() -> dict:
 @mcp.tool()
 def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
     """
-    获取概念板块历史行情
+    东方财富-沪深板块-概念板块-历史行情数据
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 概念板块名称或代码，如"新能源汽车"、"人工智能"
-      说明: 可以从stock_board_concept_name_em()获取板块列表
-
-    - period: str, 可选, 默认"daily"
-      参数格式: 字符串类型
-      可选值: "daily"(日线)、"weekly"(周线)、"monthly"(月线)
-
-    - start_date: str, 可选, 默认"20220101"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20220101"
-
-    - end_date: str, 可选, 默认"20250227"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20250227"
-
-    - adjust: str, 可选, 默认""(不复权)
-      参数格式: 字符串类型
-      可选值: ""(不复权)、"qfq"(前复权)
+    - symbol: str
+      symbol="绿色电力"; 可以通过调用 ak.stock_board_concept_name_em() 查看东方财富-概念板块的所有概念代码
+    - period: str
+      period="daily"; choice of {"daily", "weekly", "monthly"}
+    - start_date: str
+      start_date="20220101"
+    - end_date: str
+      end_date="20221128"
+    - adjust: str
+      adjust=""; choice of {'': 不复权, 默认; "qfq": 前复权, "hfq": 后复权}
     """
     try:
         from akshare_api import stock_board_concept_hist_em
@@ -1031,7 +1040,7 @@ def stock_board_industry_name_ths() -> dict:
 @mcp.tool()
 def stock_board_industry_name_em() -> dict:
     """
-    获取东方财富行业板块
+    东方财富-沪深京板块-行业板块
     """
     try:
         from akshare_api import stock_board_industry_name_em
@@ -1044,7 +1053,7 @@ def stock_board_industry_name_em() -> dict:
 @mcp.tool()
 def stock_hot_rank_em() -> dict:
     """
-    获取股票热度排行
+    东方财富网站-股票热度
     """
     try:
         from akshare_api import stock_hot_rank_em
@@ -1070,7 +1079,7 @@ def stock_market_activity_em() -> dict:
 @mcp.tool()
 def stock_board_change_em() -> dict:
     """
-    获取板块异动详情
+    东方财富-行情中心-当日板块异动详情
     """
     try:
         from akshare_api import stock_board_change_em
@@ -1083,7 +1092,7 @@ def stock_board_change_em() -> dict:
 @mcp.tool()
 def stock_zt_pool_em() -> dict:
     """
-    获取涨停股池
+    东方财富网-行情中心-涨停板行情-涨停股池
     """
     try:
         from akshare_api import stock_zt_pool_em
@@ -1096,7 +1105,7 @@ def stock_zt_pool_em() -> dict:
 @mcp.tool()
 def stock_zt_pool_previous_em() -> dict:
     """
-    获取昨日涨停股池
+    东方财富网-行情中心-涨停板行情-昨日涨停股池
     """
     try:
         from akshare_api import stock_zt_pool_previous_em
@@ -1122,14 +1131,13 @@ def stock_dt_pool_em() -> dict:
 @mcp.tool()
 def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417") -> dict:
     """
-    获取龙虎榜详情
+    东方财富网-数据中心-龙虎榜单-龙虎榜详情
 
     参数说明:
-    - start_date: str, 可选, 默认"20230403"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20230403"
-
-    - end_date: str, 可选, 默认"20230417"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20230417"
+    - start_date: str
+      start_date="20220314"
+    - end_date: str
+      end_date="20220315"
     """
     try:
         from akshare_api import stock_lhb_detail_em
@@ -1148,7 +1156,7 @@ def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417"
 @mcp.tool()
 def stock_lhb_stock_statistic_em() -> dict:
     """
-    获取个股上榜统计
+    东方财富网-数据中心-龙虎榜单-个股上榜统计
     """
     try:
         from akshare_api import stock_lhb_stock_statistic_em
@@ -1187,15 +1195,13 @@ def stock_institute_visit_detail_em() -> dict:
 @mcp.tool()
 def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
     """
-    获取机构持股详情
+    新浪财经-机构持股-机构持股详情
 
     参数说明:
-    - stock: str, 必需
-      参数格式: 6位股票代码，如"000001"、"603777"
-
-    - quarter: str, 必需
-      参数格式: 季度字符串，格式"YYYYQ季度"
-      常用值: "2024Q1"(2024年一季度)、"2024Q2"(2024年二季度)、"2024Q3"(2024年三季度)、"2024Q4"(2024年四季度)
+    - stock: str
+      stock="300003"; 股票代码
+    - quarter: str
+      quarter="20201"; 从 2005 年开始, {"一季报":1, "中报":2 "三季报":3 "年报":4}, e.g., "20191", 其中的 1 表示一季报; "20193", 其中的 3 表示三季报;
     """
     try:
         from akshare_api import stock_institute_hold_detail
@@ -1214,7 +1220,11 @@ def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
 @mcp.tool()
 def stock_institute_recommend(symbol: str) -> dict:
     """
-    获取机构推荐池
+    新浪财经-机构推荐池-具体指标的数据
+
+    参数说明:
+    - symbol: str
+      symbol="行业关注度"; choice of {'最新投资评级', '上调评级股票', '下调评级股票', '股票综合评级', '首次评级股票', '目标涨幅排名', '机构关注度', '行业关注度', '投资评级选股'}
     """
     try:
         from akshare_api import stock_institute_recommend
@@ -1231,7 +1241,11 @@ def stock_institute_recommend(symbol: str) -> dict:
 @mcp.tool()
 def stock_institute_recommend_detail(symbol: str) -> dict:
     """
-    获取股票评级记录
+    新浪财经-机构推荐池-股票评级记录
+
+    参数说明:
+    - symbol: str
+      symbol="000001"
     """
     try:
         from akshare_api import stock_institute_recommend_detail
@@ -1248,7 +1262,11 @@ def stock_institute_recommend_detail(symbol: str) -> dict:
 @mcp.tool()
 def stock_research_report_em(symbol: str) -> dict:
     """
-    获取个股研报
+    东方财富网-数据中心-研究报告-个股研报
+
+    参数说明:
+    - symbol: str
+      symbol="000001"
     """
     try:
         from akshare_api import stock_research_report_em
@@ -1304,7 +1322,11 @@ def stock_info_global_sina() -> dict:
 @mcp.tool()
 def stock_irm_cninfo(symbol: str) -> dict:
     """
-    获取互动易-提问
+    互动易-提问
+
+    参数说明:
+    - symbol: str
+      symbol="002594";
     """
     try:
         from akshare_api import stock_irm_cninfo
@@ -1321,7 +1343,11 @@ def stock_irm_cninfo(symbol: str) -> dict:
 @mcp.tool()
 def stock_irm_ans_cninfo(symbol: str) -> dict:
     """
-    获取互动易-回答
+    互动易-回答
+
+    参数说明:
+    - symbol: str
+      symbol="1495108801386602496"; 通过 ak.stock_irm_cninfo 来获取具体的提问者编号
     """
     try:
         from akshare_api import stock_irm_ans_cninfo
@@ -1338,7 +1364,11 @@ def stock_irm_ans_cninfo(symbol: str) -> dict:
 @mcp.tool()
 def stock_sns_sseinfo(symbol: str) -> dict:
     """
-    获取上证e互动
+    上证e互动-提问与回答
+
+    参数说明:
+    - symbol: str
+      symbol="603119"; 股票代码
     """
     try:
         from akshare_api import stock_sns_sseinfo
@@ -1355,7 +1385,7 @@ def stock_sns_sseinfo(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_b_spot_em() -> dict:
     """
-    获取B股实时行情-东方财富
+    东方财富网-实时行情数据
     """
     try:
         from akshare_api import stock_zh_b_spot_em
@@ -1368,7 +1398,7 @@ def stock_zh_b_spot_em() -> dict:
 @mcp.tool()
 def stock_zh_b_spot() -> dict:
     """
-    获取B股实时行情-新浪
+    B 股数据是从新浪财经获取的数据, 重复运行本函数会被新浪暂时封 IP, 建议增加时间间隔
     """
     try:
         from akshare_api import stock_zh_b_spot
@@ -1381,7 +1411,17 @@ def stock_zh_b_spot() -> dict:
 @mcp.tool()
 def stock_zh_b_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
-    获取B股历史行情数据-新浪
+    B 股数据是从新浪财经获取的数据, 历史数据按日频率更新
+
+    参数说明:
+    - symbol: str
+      symbol='sh900901'; 股票代码可以在 ak.stock_zh_b_spot() 中获取
+    - start_date: str
+      start_date='20201103'; 开始查询的日期
+    - end_date: str
+      end_date='20201116'; 结束查询的日期
+    - adjust: str
+      默认返回不复权的数据; qfq: 返回前复权后的数据; hfq: 返回后复权后的数据; hfq-factor: 返回后复权因子; qfq-factor: 返回前复权因子
     """
     try:
         from akshare_api import stock_zh_b_daily
@@ -1404,7 +1444,15 @@ def stock_zh_b_daily(symbol: str, start_date: str = "20201103", end_date: str = 
 @mcp.tool()
 def stock_zh_b_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
     """
-    获取B股分时数据-新浪
+    新浪财经 B 股股票或者指数的分时数据，目前可以获取 1, 5, 15, 30, 60 分钟的数据频率, 可以指定是否复权
+
+    参数说明:
+    - symbol: str
+      symbol='sh900901'; 同日频率数据接口
+    - period: str
+      period='1'; 获取 1, 5, 15, 30, 60 分钟的数据频率
+    - adjust: str
+      adjust=""; 默认为空: 返回不复权的数据; qfq: 返回前复权后的数据; hfq: 返回后复权后的数据;
     """
     try:
         from akshare_api import stock_zh_b_minute
@@ -1425,7 +1473,7 @@ def stock_zh_b_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
 @mcp.tool()
 def stock_hk_spot_em() -> dict:
     """
-    获取港股实时行情-东方财富
+    所有港股的实时行情数据; 该数据有 15 分钟延时
     """
     try:
         from akshare_api import stock_hk_spot_em
@@ -1438,7 +1486,7 @@ def stock_hk_spot_em() -> dict:
 @mcp.tool()
 def stock_hk_spot() -> dict:
     """
-    获取港股实时行情-新浪
+    获取所有港股的实时行情数据 15 分钟延时
     """
     try:
         from akshare_api import stock_hk_spot
@@ -1451,7 +1499,13 @@ def stock_hk_spot() -> dict:
 @mcp.tool()
 def stock_hk_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
-    获取港股历史行情数据-新浪
+    港股-历史行情数据, 可以选择返回复权后数据,更新频率为日频
+
+    参数说明:
+    - symbol: str
+      港股代码,可以通过 ak.stock_hk_spot() 函数返回所有港股代码
+    - adjust: str
+      "": 返回未复权的数据 ; qfq: 返回前复权后的数据; hfq: 返回后复权后的数据; qfq-factor: 返回前复权因子和调整; hfq-factor: 返回后复权因子和调整;
     """
     try:
         from akshare_api import stock_hk_daily
@@ -1474,7 +1528,7 @@ def stock_hk_daily(symbol: str, start_date: str = "20201103", end_date: str = "2
 @mcp.tool()
 def stock_us_spot() -> dict:
     """
-    获取美股实时行情-新浪
+    新浪财经-美股; 获取的数据有 15 分钟延迟; 建议使用 ak.stock_us_spot_em() 来获取数据
     """
     try:
         from akshare_api import stock_us_spot
@@ -1487,7 +1541,7 @@ def stock_us_spot() -> dict:
 @mcp.tool()
 def stock_us_spot_em() -> dict:
     """
-    获取美股实时行情-东方财富
+    东方财富网-美股-实时行情
     """
     try:
         from akshare_api import stock_us_spot_em
@@ -1500,7 +1554,13 @@ def stock_us_spot_em() -> dict:
 @mcp.tool()
 def stock_us_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
-    获取美股历史行情数据-新浪
+    美股历史行情数据，设定 adjust="qfq" 则返回前复权后的数据，默认 adjust="", 则返回未复权的数据，历史数据按日频率更新
+
+    参数说明:
+    - symbol: str
+      美股代码, 可以通过 ak.get_us_stock_name() 函数返回所有美股代码, 由于美股数据量大, 建议按需要获取
+    - adjust: str
+      adjust="qfq" 则返回前复权后的数据，默认 adjust="", 则返回未复权的数据
     """
     try:
         from akshare_api import stock_us_daily
@@ -1523,7 +1583,11 @@ def stock_us_daily(symbol: str, start_date: str = "20201103", end_date: str = "2
 @mcp.tool()
 def stock_zh_growth_comparison_em(symbol: str) -> dict:
     """
-    获取股票成长性比较-东方财富
+    东方财富-行情中心-同行比较-成长性比较
+
+    参数说明:
+    - symbol: str
+      symbol="SZ000895"
     """
     try:
         from akshare_api import stock_zh_growth_comparison_em
@@ -1540,7 +1604,11 @@ def stock_zh_growth_comparison_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_valuation_comparison_em(symbol: str) -> dict:
     """
-    获取股票估值比较-东方财富
+    东方财富-行情中心-同行比较-估值比较
+
+    参数说明:
+    - symbol: str
+      symbol="SZ000895"
     """
     try:
         from akshare_api import stock_zh_valuation_comparison_em
@@ -1557,7 +1625,11 @@ def stock_zh_valuation_comparison_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_dupont_comparison_em(symbol: str) -> dict:
     """
-    获取股票杜邦分析比较-东方财富
+    东方财富-行情中心-同行比较-杜邦分析比较
+
+    参数说明:
+    - symbol: str
+      symbol="SZ000895"
     """
     try:
         from akshare_api import stock_zh_dupont_comparison_em
@@ -1574,7 +1646,11 @@ def stock_zh_dupont_comparison_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_scale_comparison_em(symbol: str) -> dict:
     """
-    获取股票规模比较-东方财富
+    东方财富-行情中心-同行比较-公司规模
+
+    参数说明:
+    - symbol: str
+      symbol="SZ000895"
     """
     try:
         from akshare_api import stock_zh_scale_comparison_em
@@ -1591,7 +1667,15 @@ def stock_zh_scale_comparison_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_zh_a_cdr_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
-    获取CDR历史数据-新浪
+    上海证券交易所-科创板-CDR
+
+    参数说明:
+    - symbol: str
+      symbol='sh689009'; CDR 股票代码
+    - start_date: str
+      start_date='20201103'
+    - end_date: str
+      end_date='20201116'
     """
     try:
         from akshare_api import stock_zh_a_cdr_daily
@@ -1614,7 +1698,11 @@ def stock_zh_a_cdr_daily(symbol: str, start_date: str = "20201103", end_date: st
 @mcp.tool()
 def stock_financial_abstract(symbol: str) -> dict:
     """
-    获取财务报表数据
+    新浪财经-财务报表-关键指标
+
+    参数说明:
+    - symbol: str
+      symbol="600004"; 股票代码
     """
     try:
         from akshare_api import stock_financial_abstract
@@ -1631,7 +1719,11 @@ def stock_financial_abstract(symbol: str) -> dict:
 @mcp.tool()
 def stock_financial_analysis_indicator(symbol: str) -> dict:
     """
-    获取财务指标数据
+    新浪财经-财务分析-财务指标
+
+    参数说明:
+    - symbol: str
+      symbol="600004"; 股票代码
     """
     try:
         from akshare_api import stock_financial_analysis_indicator
@@ -1648,12 +1740,11 @@ def stock_financial_analysis_indicator(symbol: str) -> dict:
 @mcp.tool()
 def stock_yjbb_em(date: str = "20220331") -> dict:
     """
-    获取业绩报表数据
+    东方财富-数据中心-年报季报-业绩报表
 
     参数说明:
-    - date: str, 可选, 默认"20220331"
-      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
-      常用值: "20220331"(一季度)、"20220630"(二季度)、"20220930"(三季度)、"20221231"(四季度)
+    - date: str
+      date="20200331"; choice of {"XXXX0331", "XXXX0630", "XXXX0930", "XXXX1231"}; 从 20100331 开始
     """
     try:
         from akshare_api import stock_yjbb_em
@@ -1670,7 +1761,7 @@ def stock_yjbb_em(date: str = "20220331") -> dict:
 @mcp.tool()
 def stock_hsgt_fund_flow_summary_em() -> dict:
     """
-    获取沪深港通资金流向
+    东方财富网-数据中心-资金流向-沪深港通资金流向
     """
     try:
         from akshare_api import stock_hsgt_fund_flow_summary_em
@@ -1683,7 +1774,7 @@ def stock_hsgt_fund_flow_summary_em() -> dict:
 @mcp.tool()
 def stock_individual_fund_flow_rank() -> dict:
     """
-    获取个股资金流向
+    东方财富网-数据中心-资金流向-排名
     """
     try:
         from akshare_api import stock_individual_fund_flow_rank
@@ -1696,7 +1787,7 @@ def stock_individual_fund_flow_rank() -> dict:
 @mcp.tool()
 def stock_profit_forecast_em() -> dict:
     """
-    获取东方财富盈利预测
+    东方财富网-数据中心-研究报告-盈利预测; 该数据源网页端返回数据有异常, 本接口已修复该异常
     """
     try:
         from akshare_api import stock_profit_forecast_em
@@ -1709,7 +1800,7 @@ def stock_profit_forecast_em() -> dict:
 @mcp.tool()
 def stock_profit_forecast_ths() -> dict:
     """
-    获取同花顺盈利预测
+    同花顺-盈利预测
     """
     try:
         from akshare_api import stock_profit_forecast_ths
@@ -1735,7 +1826,7 @@ def stock_board_concept_cons_ths() -> dict:
 @mcp.tool()
 def stock_board_concept_name_em() -> dict:
     """
-    获取东方财富概念板块
+    东方财富网-行情中心-沪深京板块-概念板块
     """
     try:
         from akshare_api import stock_board_concept_name_em
@@ -1748,26 +1839,19 @@ def stock_board_concept_name_em() -> dict:
 @mcp.tool()
 def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
     """
-    获取概念板块历史行情
+    东方财富-沪深板块-概念板块-历史行情数据
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 概念板块名称或代码，如"新能源汽车"、"人工智能"
-      说明: 可以从stock_board_concept_name_em()获取板块列表
-
-    - period: str, 可选, 默认"daily"
-      参数格式: 字符串类型
-      可选值: "daily"(日线)、"weekly"(周线)、"monthly"(月线)
-
-    - start_date: str, 可选, 默认"20220101"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20220101"
-
-    - end_date: str, 可选, 默认"20250227"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20250227"
-
-    - adjust: str, 可选, 默认""(不复权)
-      参数格式: 字符串类型
-      可选值: ""(不复权)、"qfq"(前复权)
+    - symbol: str
+      symbol="绿色电力"; 可以通过调用 ak.stock_board_concept_name_em() 查看东方财富-概念板块的所有概念代码
+    - period: str
+      period="daily"; choice of {"daily", "weekly", "monthly"}
+    - start_date: str
+      start_date="20220101"
+    - end_date: str
+      end_date="20221128"
+    - adjust: str
+      adjust=""; choice of {'': 不复权, 默认; "qfq": 前复权, "hfq": 后复权}
     """
     try:
         from akshare_api import stock_board_concept_hist_em
@@ -1805,7 +1889,7 @@ def stock_board_industry_name_ths() -> dict:
 @mcp.tool()
 def stock_board_industry_name_em() -> dict:
     """
-    获取东方财富行业板块
+    东方财富-沪深京板块-行业板块
     """
     try:
         from akshare_api import stock_board_industry_name_em
@@ -1818,7 +1902,7 @@ def stock_board_industry_name_em() -> dict:
 @mcp.tool()
 def stock_hot_rank_em() -> dict:
     """
-    获取股票热度排行
+    东方财富网站-股票热度
     """
     try:
         from akshare_api import stock_hot_rank_em
@@ -1844,7 +1928,7 @@ def stock_market_activity_em() -> dict:
 @mcp.tool()
 def stock_board_change_em() -> dict:
     """
-    获取板块异动详情
+    东方财富-行情中心-当日板块异动详情
     """
     try:
         from akshare_api import stock_board_change_em
@@ -1857,7 +1941,7 @@ def stock_board_change_em() -> dict:
 @mcp.tool()
 def stock_zt_pool_em() -> dict:
     """
-    获取涨停股池
+    东方财富网-行情中心-涨停板行情-涨停股池
     """
     try:
         from akshare_api import stock_zt_pool_em
@@ -1870,7 +1954,7 @@ def stock_zt_pool_em() -> dict:
 @mcp.tool()
 def stock_zt_pool_previous_em() -> dict:
     """
-    获取昨日涨停股池
+    东方财富网-行情中心-涨停板行情-昨日涨停股池
     """
     try:
         from akshare_api import stock_zt_pool_previous_em
@@ -1896,14 +1980,13 @@ def stock_dt_pool_em() -> dict:
 @mcp.tool()
 def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417") -> dict:
     """
-    获取龙虎榜详情
+    东方财富网-数据中心-龙虎榜单-龙虎榜详情
 
     参数说明:
-    - start_date: str, 可选, 默认"20230403"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20230403"
-
-    - end_date: str, 可选, 默认"20230417"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20230417"
+    - start_date: str
+      start_date="20220314"
+    - end_date: str
+      end_date="20220315"
     """
     try:
         from akshare_api import stock_lhb_detail_em
@@ -1922,7 +2005,7 @@ def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417"
 @mcp.tool()
 def stock_lhb_stock_statistic_em() -> dict:
     """
-    获取个股上榜统计
+    东方财富网-数据中心-龙虎榜单-个股上榜统计
     """
     try:
         from akshare_api import stock_lhb_stock_statistic_em
@@ -1961,15 +2044,13 @@ def stock_institute_visit_detail_em() -> dict:
 @mcp.tool()
 def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
     """
-    获取机构持股详情
+    新浪财经-机构持股-机构持股详情
 
     参数说明:
-    - stock: str, 必需
-      参数格式: 6位股票代码，如"000001"、"603777"
-
-    - quarter: str, 必需
-      参数格式: 季度字符串，格式"YYYYQ季度"
-      常用值: "2024Q1"(2024年一季度)、"2024Q2"(2024年二季度)、"2024Q3"(2024年三季度)、"2024Q4"(2024年四季度)
+    - stock: str
+      stock="300003"; 股票代码
+    - quarter: str
+      quarter="20201"; 从 2005 年开始, {"一季报":1, "中报":2 "三季报":3 "年报":4}, e.g., "20191", 其中的 1 表示一季报; "20193", 其中的 3 表示三季报;
     """
     try:
         from akshare_api import stock_institute_hold_detail
@@ -1988,7 +2069,11 @@ def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
 @mcp.tool()
 def stock_institute_recommend(symbol: str) -> dict:
     """
-    获取机构推荐池
+    新浪财经-机构推荐池-具体指标的数据
+
+    参数说明:
+    - symbol: str
+      symbol="行业关注度"; choice of {'最新投资评级', '上调评级股票', '下调评级股票', '股票综合评级', '首次评级股票', '目标涨幅排名', '机构关注度', '行业关注度', '投资评级选股'}
     """
     try:
         from akshare_api import stock_institute_recommend
@@ -2005,7 +2090,11 @@ def stock_institute_recommend(symbol: str) -> dict:
 @mcp.tool()
 def stock_institute_recommend_detail(symbol: str) -> dict:
     """
-    获取股票评级记录
+    新浪财经-机构推荐池-股票评级记录
+
+    参数说明:
+    - symbol: str
+      symbol="000001"
     """
     try:
         from akshare_api import stock_institute_recommend_detail
@@ -2022,7 +2111,11 @@ def stock_institute_recommend_detail(symbol: str) -> dict:
 @mcp.tool()
 def stock_research_report_em(symbol: str) -> dict:
     """
-    获取个股研报
+    东方财富网-数据中心-研究报告-个股研报
+
+    参数说明:
+    - symbol: str
+      symbol="000001"
     """
     try:
         from akshare_api import stock_research_report_em
@@ -2078,7 +2171,11 @@ def stock_info_global_sina() -> dict:
 @mcp.tool()
 def stock_irm_cninfo(symbol: str) -> dict:
     """
-    获取互动易-提问
+    互动易-提问
+
+    参数说明:
+    - symbol: str
+      symbol="002594";
     """
     try:
         from akshare_api import stock_irm_cninfo
@@ -2095,7 +2192,11 @@ def stock_irm_cninfo(symbol: str) -> dict:
 @mcp.tool()
 def stock_irm_ans_cninfo(symbol: str) -> dict:
     """
-    获取互动易-回答
+    互动易-回答
+
+    参数说明:
+    - symbol: str
+      symbol="1495108801386602496"; 通过 ak.stock_irm_cninfo 来获取具体的提问者编号
     """
     try:
         from akshare_api import stock_irm_ans_cninfo
@@ -2112,7 +2213,11 @@ def stock_irm_ans_cninfo(symbol: str) -> dict:
 @mcp.tool()
 def stock_sns_sseinfo(symbol: str) -> dict:
     """
-    获取上证e互动
+    上证e互动-提问与回答
+
+    参数说明:
+    - symbol: str
+      symbol="603119"; 股票代码
     """
     try:
         from akshare_api import stock_sns_sseinfo
@@ -2142,7 +2247,11 @@ def stock_market_activity_em() -> dict:
 @mcp.tool()
 def stock_zyjs_ths(symbol: str) -> dict:
     """
-    获取主营介绍-同花顺
+    同花顺-主营介绍
+
+    参数说明:
+    - symbol: str
+      symbol="000066"
     """
     try:
         from akshare_api import stock_zyjs_ths
@@ -2159,7 +2268,11 @@ def stock_zyjs_ths(symbol: str) -> dict:
 @mcp.tool()
 def stock_zygc_em(symbol: str) -> dict:
     """
-    获取主营构成-东方财富
+    东方财富网-个股-主营构成
+
+    参数说明:
+    - symbol: str
+      symbol="SH688041"
     """
     try:
         from akshare_api import stock_zygc_em
@@ -2176,11 +2289,11 @@ def stock_zygc_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_gsrl_gsdt_em(date: str) -> dict:
     """
-    获取公司动态-东方财富
+    东方财富网-数据中心-股市日历-公司动态
 
     参数说明:
-    - date: str, 必需
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20240315"
+    - date: str
+      date="20230808"; 交易日
     """
     try:
         from akshare_api import stock_gsrl_gsdt_em
@@ -2197,7 +2310,11 @@ def stock_gsrl_gsdt_em(date: str) -> dict:
 @mcp.tool()
 def stock_dividend_cninfo(symbol: str) -> dict:
     """
-    获取历史分红-巨潮资讯
+    巨潮资讯-个股-历史分红
+
+    参数说明:
+    - symbol: str
+      symbol="600009"
     """
     try:
         from akshare_api import stock_dividend_cninfo
@@ -2214,7 +2331,11 @@ def stock_dividend_cninfo(symbol: str) -> dict:
 @mcp.tool()
 def stock_news_em(symbol: str) -> dict:
     """
-    获取个股新闻-东方财富
+    东方财富指定个股的新闻资讯数据
+
+    参数说明:
+    - symbol: str
+      symbol="603777"; 股票代码或其他关键词
     """
     try:
         from akshare_api import stock_news_em
@@ -2231,7 +2352,7 @@ def stock_news_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_news_main_cx() -> dict:
     """
-    获取财经内容精选-财新网
+    财新网-财新数据通-最新
     """
     try:
         from akshare_api import stock_news_main_cx
@@ -2244,15 +2365,11 @@ def stock_news_main_cx() -> dict:
 @mcp.tool()
 def stock_financial_report_sina(stock: str, indicator: str) -> dict:
     """
-    获取财务报表-新浪
+    新浪财经-财务报表-三大报表
 
     参数说明:
-    - stock: str, 必需
-      参数格式: 带市场前缀的股票代码，如"sh600519"、"sz000001"
-
-    - indicator: str, 必需
-      参数格式: 财务指标类型
-      可选值: "利润表"、"资产负债表"、"现金流量表"
+    - stock: str
+      stock="sh600600"; 带市场标识的股票代码
     """
     try:
         from akshare_api import stock_financial_report_sina
@@ -2271,12 +2388,11 @@ def stock_financial_report_sina(stock: str, indicator: str) -> dict:
 @mcp.tool()
 def stock_yjkb_em(date: str) -> dict:
     """
-    获取业绩快报-东方财富
+    东方财富-数据中心-年报季报-业绩快报
 
     参数说明:
-    - date: str, 必需
-      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
-      常用值: "20240331"(一季度)、"20240630"(二季度)、"20240930"(三季度)、"20241231"(四季度)
+    - date: str
+      date="20200331"; choice of {"XXXX0331", "XXXX0630", "XXXX0930", "XXXX1231"}; 从 20100331 开始
     """
     try:
         from akshare_api import stock_yjkb_em
@@ -2293,12 +2409,11 @@ def stock_yjkb_em(date: str) -> dict:
 @mcp.tool()
 def stock_yjyg_em(date: str) -> dict:
     """
-    获取业绩预告-东方财富
+    东方财富-数据中心-年报季报-业绩预告
 
     参数说明:
-    - date: str, 必需
-      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
-      常用值: "20240331"(一季度)、"20240630"(二季度)、"20240930"(三季度)、"20241231"(四季度)
+    - date: str
+      date="20200331"; choice of {"XXXX0331", "XXXX0630", "XXXX0930", "XXXX1231"}; 从 20081231 开始
     """
     try:
         from akshare_api import stock_yjyg_em
@@ -2315,15 +2430,13 @@ def stock_yjyg_em(date: str) -> dict:
 @mcp.tool()
 def stock_yysj_em(symbol: str, date: str) -> dict:
     """
-    获取预约披露时间-东方财富
+    东方财富-数据中心-年报季报-预约披露时间
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 6位股票代码，如"000001"、"603777"
-
-    - date: str, 必需
-      参数格式: 8位数字字符串，格式YYYYMMDD，通常为季度末日期
-      常用值: "20240331"(一季度)、"20240630"(二季度)、"20240930"(三季度)、"20241231"(四季度)
+    - symbol: str
+      symbol="沪深A股"; choice of {'沪深A股', '沪市A股', '科创板', '深市A股', '创业板', '京市A股', 'ST板'}
+    - date: str
+      date="20200331"; choice of {"XXXX0331", "XXXX0630", "XXXX0930", "XXXX1231"}; 从 20081231 开始
     """
     try:
         from akshare_api import stock_yysj_em
@@ -2342,12 +2455,11 @@ def stock_yysj_em(symbol: str, date: str) -> dict:
 @mcp.tool()
 def stock_board_concept_cons_em(symbol: str) -> dict:
     """
-    获取概念板块成分股-东方财富
+    东方财富-沪深板块-概念板块-板块成份
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 概念板块名称或代码，如"新能源汽车"、"人工智能"
-      说明: 可以从stock_board_concept_name_em()获取板块列表
+    - symbol: str
+      symbol="融资融券"; 支持传入板块代码比如：BK0655，可以通过调用 ak.stock_board_concept_name_em() 查看东方财富-概念板块的所有行业名称
     """
     try:
         from akshare_api import stock_board_concept_cons_em
@@ -2364,7 +2476,19 @@ def stock_board_concept_cons_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
     """
-    获取概念板块指数-东方财富
+    东方财富-沪深板块-概念板块-历史行情数据
+
+    参数说明:
+    - symbol: str
+      symbol="绿色电力"; 可以通过调用 ak.stock_board_concept_name_em() 查看东方财富-概念板块的所有概念代码
+    - period: str
+      period="daily"; choice of {"daily", "weekly", "monthly"}
+    - start_date: str
+      start_date="20220101"
+    - end_date: str
+      end_date="20221128"
+    - adjust: str
+      adjust=""; choice of {'': 不复权, 默认; "qfq": 前复权, "hfq": 后复权}
     """
     try:
         from akshare_api import stock_board_concept_hist_em
@@ -2389,12 +2513,11 @@ def stock_board_concept_hist_em(symbol: str, period: str = "daily", start_date: 
 @mcp.tool()
 def stock_board_industry_cons_em(symbol: str) -> dict:
     """
-    获取行业板块成分股-东方财富
+    东方财富-沪深板块-行业板块-板块成份
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 行业板块名称或代码，如"银行"、"医药生物"
-      说明: 可以从stock_board_industry_name_em()获取板块列表
+    - symbol: str
+      symbol="小金属"; 支持传入板块代码比如：BK1027，可以通过调用 ak.stock_board_industry_name_em() 查看东方财富-行业板块的所有行业代码
     """
     try:
         from akshare_api import stock_board_industry_cons_em
@@ -2411,26 +2534,19 @@ def stock_board_industry_cons_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_board_industry_hist_em(symbol: str, period: str = "daily", start_date: str = "20220101", end_date: str = "20250227", adjust: str = "") -> dict:
     """
-    获取行业板块指数-东方财富
+    东方财富-沪深板块-行业板块-历史行情数据
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 行业板块名称或代码，如"银行"、"医药生物"
-      说明: 可以从stock_board_industry_name_em()获取板块列表
-
-    - period: str, 可选, 默认"daily"
-      参数格式: 字符串类型
-      可选值: "daily"(日线)、"weekly"(周线)、"monthly"(月线)
-
-    - start_date: str, 可选, 默认"20220101"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20220101"
-
-    - end_date: str, 可选, 默认"20250227"
-      参数格式: 8位数字字符串，格式YYYYMMDD，如"20250227"
-
-    - adjust: str, 可选, 默认""(不复权)
-      参数格式: 字符串类型
-      可选值: ""(不复权)、"qfq"(前复权)
+    - symbol: str
+      symbol="小金属"; 可以通过调用 ak.stock_board_industry_name_em() 查看东方财富-行业板块的所有行业代码
+    - period: str
+      period="日k"; 周期; choice of {"日k", "周k", "月k"}
+    - start_date: str
+      start_date="20211201";
+    - end_date: str
+      end_date="20220401";
+    - adjust: str
+      adjust=""; choice of {'': 不复权, 默认; "qfq": 前复权, "hfq": 后复权}
     """
     try:
         from akshare_api import stock_board_industry_hist_em
@@ -2455,12 +2571,11 @@ def stock_board_industry_hist_em(symbol: str, period: str = "daily", start_date:
 @mcp.tool()
 def stock_hot_follow_xq(symbol: str) -> dict:
     """
-    获取股票热度-雪球关注排行榜
+    雪球-沪深股市-热度排行榜-关注排行榜
 
     参数说明:
-    - symbol: str, 必需
-      参数格式: 带市场前缀的股票代码，如"SH600000"、"SZ000001"
-      说明: 市场前缀包括SH(上海)、SZ(深圳)、BJ(北京)
+    - symbol: str
+      symbol="最热门"; choice of {"本周新增", "最热门"}
     """
     try:
         from akshare_api import stock_hot_follow_xq
@@ -2477,7 +2592,11 @@ def stock_hot_follow_xq(symbol: str) -> dict:
 @mcp.tool()
 def stock_hot_rank_detail_em(symbol: str) -> dict:
     """
-    获取历史趋势及粉丝特征-东方财富
+    东方财富网-股票热度-历史趋势及粉丝特征
+
+    参数说明:
+    - symbol: str
+      symbol="SZ000665"
     """
     try:
         from akshare_api import stock_hot_rank_detail_em
@@ -2494,7 +2613,7 @@ def stock_hot_rank_detail_em(symbol: str) -> dict:
 @mcp.tool()
 def stock_hot_rank_detail_xq(symbol: str) -> dict:
     """
-    获取个股人气榜-实时变动
+    
     """
     try:
         from akshare_api import stock_hot_rank_detail_xq
@@ -2511,7 +2630,7 @@ def stock_hot_rank_detail_xq(symbol: str) -> dict:
 @mcp.tool()
 def stock_hot_rank_latest_em() -> dict:
     """
-    获取个股人气榜-最新排名
+    东方财富-个股人气榜-最新排名
     """
     try:
         from akshare_api import stock_hot_rank_latest_em
@@ -2524,7 +2643,7 @@ def stock_hot_rank_latest_em() -> dict:
 @mcp.tool()
 def stock_hot_keyword_em() -> dict:
     """
-    获取热门关键词-东方财富
+    东方财富-个股人气榜-热门关键词
     """
     try:
         from akshare_api import stock_hot_keyword_em
@@ -2550,7 +2669,7 @@ def stock_hot_search_em() -> dict:
 @mcp.tool()
 def stock_hot_related_em(symbol: str) -> dict:
     """
-    获取相关股票-东方财富
+    
     """
     try:
         from akshare_api import stock_hot_related_em
