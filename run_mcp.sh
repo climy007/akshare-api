@@ -38,4 +38,20 @@ echo "按 Ctrl+C 停止服务"
 echo "========================================="
 echo ""
 
+# 文件缓存默认配置（可通过外部环境变量覆盖）
+if [ -z "${CACHE_DIR:-}" ]; then
+    export CACHE_DIR="./.cache/akshare-mcp"
+fi
+# 方案 B：降请求优先（未设置时使用）
+: "${CACHE_TTL_REALTIME:=180}"
+: "${CACHE_TTL_DAILY:=1800}"
+: "${CACHE_TTL_STATIC:=3600}"
+: "${CACHE_CLEAN_INTERVAL_SECONDS:=3600}"
+export CACHE_TTL_REALTIME CACHE_TTL_DAILY CACHE_TTL_STATIC CACHE_CLEAN_INTERVAL_SECONDS
+
+echo "文件缓存目录: ${CACHE_DIR}"
+echo "缓存 TTL(实时/日频/静态): ${CACHE_TTL_REALTIME}/${CACHE_TTL_DAILY}/${CACHE_TTL_STATIC} 秒"
+echo "缓存清理周期: ${CACHE_CLEAN_INTERVAL_SECONDS} 秒"
+echo ""
+
 python mcp_server.py

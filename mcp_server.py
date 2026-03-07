@@ -8,11 +8,18 @@ import logging
 import os
 import re
 import sys
+import threading
+import time
 import requests
 
 # 导入配置
 from config import (
     AKTOOLS_BASE_URL,
+    CACHE_CLEAN_INTERVAL_SECONDS,
+    CACHE_DIR,
+    CACHE_TTL_DAILY,
+    CACHE_TTL_REALTIME,
+    CACHE_TTL_STATIC,
     MCP_SERVER_NAME,
     MCP_SERVER_VERSION,
     MCP_SERVER_PORT,
@@ -22,6 +29,7 @@ from config import (
 
 # 导入工具函数
 from mcp_utils import dataframe_to_mcp_result, format_error_response
+from file_cache import file_cached, clean_expired
 
 # 导入 AKShare 接口
 sys.path.append('.')
@@ -34,6 +42,39 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 RUNTIME_XQ_TOKEN = os.getenv("XQ_A_TOKEN", "").strip()
+_cache_cleaner_stop_event: threading.Event | None = None
+
+
+def _run_cache_cleanup_once() -> None:
+    if CACHE_DIR is None:
+        return
+    try:
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        logger.warning("file_cache init failed (%s): %s", CACHE_DIR, e)
+        return
+    if not CACHE_DIR.is_dir():
+        logger.warning("file_cache disabled: CACHE_DIR is not a directory (%s)", CACHE_DIR)
+        return
+    n = clean_expired(CACHE_DIR)
+    logger.info("file_cache clean_expired: %s files removed", n)
+
+
+def _start_cache_cleaner(interval_seconds: int) -> None:
+    global _cache_cleaner_stop_event
+    if CACHE_DIR is None or interval_seconds <= 0:
+        return
+
+    stop_event = threading.Event()
+    _cache_cleaner_stop_event = stop_event
+
+    def _worker() -> None:
+        while not stop_event.wait(interval_seconds):
+            _run_cache_cleanup_once()
+
+    t = threading.Thread(target=_worker, name="file-cache-cleaner", daemon=True)
+    t.start()
+    logger.info("file_cache periodic cleaner started: every %ss", interval_seconds)
 
 
 def _mask_token(token: str) -> str:
@@ -108,6 +149,7 @@ AKShare 股票数据接口 MCP 服务器 v{MCP_SERVER_VERSION}
 
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_sse_summary() -> dict:
     """
     上海证券交易所-股票数据总貌
@@ -121,6 +163,7 @@ def stock_sse_summary() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_szse_summary() -> dict:
     """
     深圳证券交易所-市场总貌-证券类别统计
@@ -134,6 +177,7 @@ def stock_szse_summary() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_szse_area_summary() -> dict:
     """
     深圳证券交易所-市场总貌-地区交易排序
@@ -147,6 +191,7 @@ def stock_szse_area_summary() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_szse_sector_summary(symbol: str = "当年") -> dict:
     """
     深圳证券交易所-统计资料-股票行业成交数据
@@ -168,6 +213,7 @@ def stock_szse_sector_summary(symbol: str = "当年") -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_sse_deal_daily() -> dict:
     """
     上海证券交易所-数据-股票数据-成交概况-股票成交概况-每日股票情况
@@ -181,6 +227,7 @@ def stock_sse_deal_daily() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_individual_info_em(symbol: str) -> dict:
     """
     东方财富-个股-股票信息
@@ -202,6 +249,7 @@ def stock_individual_info_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_individual_basic_info_xq(symbol: str) -> dict:
     """
     雪球财经-个股-公司概况-公司简介
@@ -223,6 +271,7 @@ def stock_individual_basic_info_xq(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_zh_a_spot() -> dict:
     """
     新浪财经-沪深京 A 股数据, 重复运行本函数会被新浪暂时封 IP, 建议增加时间间隔
@@ -352,6 +401,7 @@ def xq_token_update(token: str = "", cookie: str = "", verify_symbol: str = "SH6
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_zh_a_hist(symbol: str, period: str = "daily", start_date: str = "20210301", end_date: str = "20210616", adjust: str = "", timeout: str = None) -> dict:
     """
     东方财富-沪深京 A 股日频率数据; 历史数据按日频率更新, 当日收盘价请在收盘后获取
@@ -393,6 +443,7 @@ def stock_zh_a_hist(symbol: str, period: str = "daily", start_date: str = "20210
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_zh_a_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
     新浪财经-沪深京 A 股的数据, 历史数据按日频率更新; 注意其中的 sh689009 为 CDR, 请 通过 ak.stock_zh_a_cdr_daily 接口获取
@@ -426,6 +477,7 @@ def stock_zh_a_daily(symbol: str, start_date: str = "20201103", end_date: str = 
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_zh_a_hist_tx(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
     腾讯证券-日频-股票历史数据; 历史数据按日频率更新, 当日收盘价请在收盘后获取
@@ -530,6 +582,7 @@ def stock_zh_a_hist_pre_min_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_zh_growth_comparison_em(symbol: str) -> dict:
     """
     东方财富-行情中心-同行比较-成长性比较
@@ -551,6 +604,7 @@ def stock_zh_growth_comparison_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_zh_valuation_comparison_em(symbol: str) -> dict:
     """
     东方财富-行情中心-同行比较-估值比较
@@ -572,6 +626,7 @@ def stock_zh_valuation_comparison_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_zh_dupont_comparison_em(symbol: str) -> dict:
     """
     东方财富-行情中心-同行比较-杜邦分析比较
@@ -593,6 +648,7 @@ def stock_zh_dupont_comparison_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_zh_scale_comparison_em(symbol: str) -> dict:
     """
     东方财富-行情中心-同行比较-公司规模
@@ -614,6 +670,7 @@ def stock_zh_scale_comparison_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_financial_abstract(symbol: str) -> dict:
     """
     新浪财经-财务报表-关键指标
@@ -635,6 +692,7 @@ def stock_financial_abstract(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_yjbb_em(date: str = "20220331") -> dict:
     """
     东方财富-数据中心-年报季报-业绩报表
@@ -656,6 +714,7 @@ def stock_yjbb_em(date: str = "20220331") -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_hsgt_fund_flow_summary_em() -> dict:
     """
     东方财富网-数据中心-资金流向-沪深港通资金流向
@@ -669,6 +728,7 @@ def stock_hsgt_fund_flow_summary_em() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_profit_forecast_em() -> dict:
     """
     东方财富网-数据中心-研究报告-盈利预测; 该数据源网页端返回数据有异常, 本接口已修复该异常
@@ -682,6 +742,7 @@ def stock_profit_forecast_em() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_profit_forecast_ths() -> dict:
     """
     同花顺-盈利预测
@@ -695,6 +756,7 @@ def stock_profit_forecast_ths() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_board_industry_name_ths() -> dict:
     """
     获取同花顺行业一览表
@@ -708,6 +770,7 @@ def stock_board_industry_name_ths() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_hot_rank_em() -> dict:
     """
     东方财富网站-股票热度
@@ -721,6 +784,7 @@ def stock_hot_rank_em() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417") -> dict:
     """
     东方财富网-数据中心-龙虎榜单-龙虎榜详情
@@ -746,6 +810,7 @@ def stock_lhb_detail_em(start_date: str = "20230403", end_date: str = "20230417"
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_lhb_stock_statistic_em() -> dict:
     """
     东方财富网-数据中心-龙虎榜单-个股上榜统计
@@ -759,6 +824,7 @@ def stock_lhb_stock_statistic_em() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
     """
     新浪财经-机构持股-机构持股详情
@@ -784,6 +850,7 @@ def stock_institute_hold_detail(stock: str, quarter: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_research_report_em(symbol: str) -> dict:
     """
     东方财富网-数据中心-研究报告-个股研报
@@ -805,6 +872,7 @@ def stock_research_report_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_info_cjzc_em() -> dict:
     """
     获取财经早餐
@@ -818,6 +886,7 @@ def stock_info_cjzc_em() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_info_global_em() -> dict:
     """
     获取全球财经快讯-东方财富
@@ -831,6 +900,7 @@ def stock_info_global_em() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_info_global_sina() -> dict:
     """
     获取全球财经快讯-新浪财经
@@ -844,6 +914,7 @@ def stock_info_global_sina() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_irm_cninfo(symbol: str) -> dict:
     """
     互动易-提问
@@ -865,6 +936,7 @@ def stock_irm_cninfo(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_irm_ans_cninfo(symbol: str) -> dict:
     """
     互动易-回答
@@ -886,6 +958,7 @@ def stock_irm_ans_cninfo(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_zh_b_spot() -> dict:
     """
     B 股数据是从新浪财经获取的数据, 重复运行本函数会被新浪暂时封 IP, 建议增加时间间隔
@@ -899,6 +972,7 @@ def stock_zh_b_spot() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_zh_b_daily(symbol: str, start_date: str = "20201103", end_date: str = "20201116", adjust: str = "") -> dict:
     """
     B 股数据是从新浪财经获取的数据, 历史数据按日频率更新
@@ -932,6 +1006,7 @@ def stock_zh_b_daily(symbol: str, start_date: str = "20201103", end_date: str = 
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_zh_b_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
     """
     新浪财经 B 股股票或者指数的分时数据，目前可以获取 1, 5, 15, 30, 60 分钟的数据频率, 可以指定是否复权
@@ -961,6 +1036,7 @@ def stock_zh_b_minute(symbol: str, period: str = "1", adjust: str = "") -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_hk_spot() -> dict:
     """
     获取所有港股的实时行情数据 15 分钟延时
@@ -974,6 +1050,7 @@ def stock_hk_spot() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_us_spot() -> dict:
     """
     新浪财经-美股; 获取的数据有 15 分钟延迟; 建议使用 ak.stock_us_spot_em() 来获取数据
@@ -987,6 +1064,7 @@ def stock_us_spot() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_zyjs_ths(symbol: str) -> dict:
     """
     同花顺-主营介绍
@@ -1008,6 +1086,7 @@ def stock_zyjs_ths(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_zygc_em(symbol: str) -> dict:
     """
     东方财富网-个股-主营构成
@@ -1029,6 +1108,7 @@ def stock_zygc_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_gsrl_gsdt_em(date: str) -> dict:
     """
     东方财富网-数据中心-股市日历-公司动态
@@ -1050,6 +1130,7 @@ def stock_gsrl_gsdt_em(date: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_STATIC)
 def stock_dividend_cninfo(symbol: str) -> dict:
     """
     巨潮资讯-个股-历史分红
@@ -1071,6 +1152,7 @@ def stock_dividend_cninfo(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_news_em(symbol: str) -> dict:
     """
     东方财富指定个股的新闻资讯数据
@@ -1092,6 +1174,7 @@ def stock_news_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_news_main_cx() -> dict:
     """
     财新网-财新数据通-最新
@@ -1105,6 +1188,7 @@ def stock_news_main_cx() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_yjkb_em(date: str) -> dict:
     """
     东方财富-数据中心-年报季报-业绩快报
@@ -1126,6 +1210,7 @@ def stock_yjkb_em(date: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_yjyg_em(date: str) -> dict:
     """
     东方财富-数据中心-年报季报-业绩预告
@@ -1147,6 +1232,7 @@ def stock_yjyg_em(date: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_DAILY)
 def stock_yysj_em(symbol: str, date: str) -> dict:
     """
     东方财富-数据中心-年报季报-预约披露时间
@@ -1172,6 +1258,7 @@ def stock_yysj_em(symbol: str, date: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_hot_follow_xq(symbol: str) -> dict:
     """
     雪球-沪深股市-热度排行榜-关注排行榜
@@ -1193,6 +1280,7 @@ def stock_hot_follow_xq(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_hot_rank_detail_em(symbol: str) -> dict:
     """
     东方财富网-股票热度-历史趋势及粉丝特征
@@ -1214,6 +1302,7 @@ def stock_hot_rank_detail_em(symbol: str) -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_hot_rank_latest_em() -> dict:
     """
     东方财富-个股人气榜-最新排名
@@ -1227,6 +1316,7 @@ def stock_hot_rank_latest_em() -> dict:
         return format_error_response(e)
 
 @mcp.tool()
+@file_cached(ttl_seconds=CACHE_TTL_REALTIME)
 def stock_hot_keyword_em() -> dict:
     """
     东方财富-个股人气榜-热门关键词
@@ -1241,6 +1331,8 @@ def stock_hot_keyword_em() -> dict:
 
 # 启动服务器
 if __name__ == "__main__":
+    _run_cache_cleanup_once()
+    _start_cache_cleaner(CACHE_CLEAN_INTERVAL_SECONDS)
     logger.info(f"启动 {MCP_SERVER_NAME} v{MCP_SERVER_VERSION}")
     logger.info(f"监听端口: {MCP_SERVER_PORT}")
     logger.info(f"监听地址: {MCP_SERVER_HOST}:{MCP_SERVER_PORT}")

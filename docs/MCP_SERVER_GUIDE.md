@@ -50,6 +50,24 @@ python mcp_server.py
 MCP_SERVER_PORT=9000 python mcp_server.py
 ```
 
+### 常用环境变量（含缓存）
+
+```bash
+# 服务基础配置
+export AKTOOLS_BASE_URL="http://127.0.0.1:8080"
+export MCP_SERVER_HOST="0.0.0.0"
+export MCP_SERVER_PORT="8000"
+export LOG_LEVEL="INFO"
+
+# 文件缓存配置（不设置 CACHE_DIR 则禁用文件缓存）
+export CACHE_DIR="./.cache/akshare-mcp"
+export CACHE_TTL_REALTIME="60"
+export CACHE_TTL_DAILY="900"
+export CACHE_TTL_STATIC="1800"
+export CACHE_DEFAULT_TTL="300"
+export CACHE_CLEAN_INTERVAL_SECONDS="1800"
+```
+
 ## Claude Desktop 配置
 
 在 Claude Desktop 的配置文件中添加：
@@ -186,6 +204,37 @@ curl -X POST http://localhost:8000/tools/call \
 1. 检查 AKTools 服务是否正常
 2. 确认网络连接
 3. 查看服务器日志
+
+### 缓存未生效或命中率低
+
+1. 确认已设置 `CACHE_DIR`（未设置时缓存关闭）
+2. 确认目录可写：`mkdir -p "$CACHE_DIR" && touch "$CACHE_DIR/.probe"`
+3. 根据场景调大 `CACHE_TTL_REALTIME` / `CACHE_TTL_DAILY` / `CACHE_TTL_STATIC`
+4. 检查日志中是否有 `file_cache` 相关告警
+
+## 缓存参数建议
+
+### 方案 A：低延迟优先（默认推荐）
+
+```bash
+export CACHE_TTL_REALTIME="60"
+export CACHE_TTL_DAILY="900"
+export CACHE_TTL_STATIC="1800"
+export CACHE_CLEAN_INTERVAL_SECONDS="1800"
+```
+
+适合对实时性要求较高的场景，整体缓存命中率中等，请求压力可明显下降。
+
+### 方案 B：降请求优先（防封/省流量）
+
+```bash
+export CACHE_TTL_REALTIME="180"
+export CACHE_TTL_DAILY="1800"
+export CACHE_TTL_STATIC="3600"
+export CACHE_CLEAN_INTERVAL_SECONDS="3600"
+```
+
+适合上游限流严格或网络波动较大的场景，命中率更高，但数据新鲜度会下降。
 
 ## 开发
 
